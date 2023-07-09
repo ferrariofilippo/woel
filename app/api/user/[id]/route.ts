@@ -5,9 +5,9 @@ export async function GET(request: Request) {
   if (request.url === undefined)
     return NextResponse.error();
 
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  if (id === null)
+  const url = new URL(request.url).href;
+  const id = url.split('/').pop();
+  if (id === undefined)
     return NextResponse.error();
 
   return NextResponse.json(await fetchUserById(id));
