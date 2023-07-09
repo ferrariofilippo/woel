@@ -79,7 +79,14 @@ export const deleteUser = async (userId: string) => {
   }
 };
 
-export const fetchAds = async () => {
+export const fetchAds = async (
+  priceGt: string | null,
+  priceLt: string | null,
+  isbn: string | null,
+  title: string | null,
+  subject: string | null,
+  year: string | null
+) => {
   try {
     const { data } = await database
       .from('advertisement')
@@ -87,16 +94,19 @@ export const fetchAds = async () => {
         `id, price, negotiable_price, rating, notes, status,
         book:book_id (isbn, title, author, subject, year),
         owner:owner_id (user_id, first_name, last_name, contact, contact_type)`
-      );
+      )
+      .filter('status', 'eq', 'Available')
+      .filter('price', 'gte', parseFloat(priceGt ?? '0'))
+      .filter('price', 'lte', parseFloat(priceLt ?? '100'))
+      .filter('book.isbn', 'like', isbn ?? '%')
+      .filter('book.title', 'like', title ?? '%')
+      .filter('book.subject', 'like', subject ?? '%')
+      .or(`year.eq.${parseInt(year ?? '5')}, ${year === null}`);
 
-      return data;
+    return data;
   } catch (error) {
     console.log('error', error);
   }
-};
-
-export const fetchAndFilterAds = async () => {
-
 };
 
 export const fetchAdById = async (advertisementId: number) => {
@@ -156,7 +166,7 @@ export const addAdPicture = async (advertisementId: number, file: ArrayBuffer) =
       await database
         .storage
         .from('avatars')
-        .upload(`${advertisementId}_${data['data'][0]['id']}.png`, file, {
+        .upload(`${advertisementId}_${data[0]['id']}.png`, file, {
           cacheControl: '3600',
           upsert: true
         });
@@ -228,6 +238,15 @@ export const markAsInterested = async (advertisementId: number, userId: string) 
 
 export const deleteAd = async (advertisementId: number) => {
   try {
+    const { data } = await database
+      .from('advertisement_picture')
+      .select()
+      .eq('advertisement_id', advertisementId);
+
+    data?.forEach(async (entry) => {
+      await removeAdPicture(advertisementId, entry['id']);
+    });
+
     const { error } = await database
       .from('advertisement')
       .delete()
