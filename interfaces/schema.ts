@@ -135,18 +135,15 @@ export interface Database {
           first_name: string,
           last_name: string,
           class: string,
-          public_contact: string,
-          contact_type: number,
           school_id: number,
-          specialization_id: number
+          specialization_id: number,
+          email: string
         }
         Insert: {
           user_id: string,
           first_name: string,
           last_name: string,
           class: string,
-          public_contact: string,
-          contact_type: number,
           school_id: number,
           specialization_id: number
         }
@@ -155,8 +152,6 @@ export interface Database {
           first_name: string,
           last_name: string,
           class: string,
-          public_contact: string,
-          contact_type: string,
           school_id: number,
           specialization_id: number 
         }
@@ -173,10 +168,6 @@ export interface Database {
         'Available',
         'Negotiating',
         'Closed'
-      ]
-      contact_type: [
-        'Email',
-        'Phone'
       ]
     }
     CompositeTypes: {

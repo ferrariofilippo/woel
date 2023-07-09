@@ -8,7 +8,7 @@ export const database = createClient(
   process.env.SUPABASE_KEY ?? ''
 );
 
-export type User = Database['public']['tables']['user_data']['Row'];
+export type User = Database['public']['tables']['user_data']['Update'];
 
 export type Advertisement = Database['public']['tables']['advertisement']['Row'];
 
@@ -17,7 +17,7 @@ export const fetchUserById = async (userId: string) => {
     const { data } = await database
       .from('user_data')
       .select(
-        `user_id, first_name, last_name, class, public_contact, contact_type,
+        `user_id, first_name, last_name, class, email,
         specialization:specialization_id (specialization_name),
         school:school_id (school_name)`
       )
@@ -29,7 +29,7 @@ export const fetchUserById = async (userId: string) => {
   }
 };
 
-export const setUserPicture = async (userId: string, file: ArrayBuffer) => {
+export const setUserPicture = async (userId: string, file: ReadableStream<Uint8Array>) => {
   try {
     const { error } = await database
       .storage
@@ -53,8 +53,6 @@ export const updateUser = async (user: User) => {
         first_name: user.first_name,
         last_name: user.last_name,
         class: user.class,
-        public_contact: user.public_contact,
-        contact_type: user.contact_type,
         school_id: user.school_id,
         specialization_id: user.specialization_id
       })
@@ -93,7 +91,7 @@ export const fetchAds = async (
       .select(
         `id, price, negotiable_price, rating, notes, status,
         book:book_id (isbn, title, author, subject, year),
-        owner:owner_id (user_id, first_name, last_name, contact, contact_type)`
+        owner:owner_id (user_id, first_name, last_name, email)`
       )
       .filter('status', 'eq', 'Available')
       .filter('price', 'gte', parseFloat(priceGt ?? '0'))
@@ -116,7 +114,7 @@ export const fetchAdById = async (advertisementId: number) => {
       .select(
         `id, price, negotiable_price, rating, notes, status,
         book:book_id (isbn, title, author, subject, year),
-        owner:owner_id (user_id, first_name, last_name, contact, contact_type)`
+        owner:owner_id (user_id, first_name, last_name, email)`
       )
       .eq('id', advertisementId);
 
@@ -155,7 +153,7 @@ export const updateAd = async (ad: Advertisement) => {
   }
 };
 
-export const addAdPicture = async (advertisementId: number, file: ArrayBuffer) => {
+export const addAdPicture = async (advertisementId: number, file: ReadableStream<Uint8Array>) => {
   try {
     const { data } = await database
       .from('advertisement_picture')
