@@ -3,14 +3,75 @@ import { Database } from '@/interfaces/schema';
 
 export const SOLD_STATE = 3;
 
+export type User = Database['public']['tables']['user_data']['Update'];
+
+export type Advertisement = Database['public']['tables']['advertisement']['Row'];
+
 export const database = createClient(
   process.env.SUPABASE_URL ?? '',
   process.env.SUPABASE_KEY ?? ''
 );
 
-export type User = Database['public']['tables']['user_data']['Update'];
+export const logIn = async (email: string, password: string) => {
+  try {
+    const { data } = await database.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-export type Advertisement = Database['public']['tables']['advertisement']['Row'];
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const signUp = async (
+  email: string,
+  password: string,
+  firstName: string,
+  lastName: string,
+  className: string,
+  school: number,
+  specialization: number
+) => {
+  try {
+    const { data } = await database.auth.signUp({
+      email: email,
+      password: password,
+      // TODO: Use the propert link
+      options: {
+        emailRedirectTo: 'https://localhost:3000/'
+      }
+    });
+
+    const { error } = await database
+      .from('user_data')
+      .insert({
+        user_id: data['user']?.id ?? '',
+        first_name: firstName,
+        last_name: lastName,
+        class: className,
+        school_id: school,
+        specialization_id: specialization,
+        email: email
+      }); 
+
+    console.log(error);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const { error } = await database.auth.signOut();
+
+    return error;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const fetchUserById = async (userId: string) => {
   try {
