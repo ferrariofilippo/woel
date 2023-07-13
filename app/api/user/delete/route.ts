@@ -1,14 +1,17 @@
-import { deleteUser } from "@/lib/Store";
-import { NextResponse } from "next/server";
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
+import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  if (request.url === undefined)
+  const id = new URL(request.url).searchParams.get('id');
+  if (!id)
     return NextResponse.error();
 
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get('id');
-  if (id === null)
-    return NextResponse.error();
+  const supabase = createRouteHandlerClient({ cookies });
+  const { error } = await supabase
+    .from('user_data')
+    .delete()
+    .eq('user_id', id);
 
-  return NextResponse.json(await deleteUser(id));
+  return NextResponse.json(error);
 }

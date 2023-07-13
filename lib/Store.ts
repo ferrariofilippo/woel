@@ -106,38 +106,6 @@ export const setUserPicture = async (userId: string, file: ReadableStream<Uint8A
   }
 };
 
-export const updateUser = async (user: User) => {
-  try {
-    const { error } = await database
-      .from('user_data')
-      .update({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        class: user.class,
-        school_id: user.school_id,
-        specialization_id: user.specialization_id
-      })
-      .eq('user_id', user.user_id);
-
-    return error;
-  } catch(error) {
-    console.log('error', error);
-  }
-};
-
-export const deleteUser = async (userId: string) => {
-  try {
-    const { error } = await database
-      .from('user_data')
-      .delete()
-      .eq('user_id', userId);
-
-    return error;
-  } catch (error) {
-    console.log('error', error);
-  }
-};
-
 export const fetchAds = async (
   priceGt: string | null,
   priceLt: string | null,
@@ -185,35 +153,6 @@ export const fetchAdById = async (advertisementId: number) => {
   }
 };
 
-export const createAd = async (ad: Advertisement) => {
-  try {
-    await database.from('advertisement').insert(ad);
-  } catch (error) {
-    console.log('error', error);
-  }
-};
-
-export const updateAd = async (ad: Advertisement) => {
-  try {
-    const { error } = await database
-      .from('advertisement')
-      .update({
-        owner_id: ad.owner_id,
-        book_id: ad.book_id,
-        price: ad.price,
-        negotiable_price: ad.negotiable_price,
-        rating: ad.rating,
-        notes: ad.notes,
-        status: ad.status  
-      })
-      .eq('id', ad.id);
-    
-    return error;
-  } catch (error) {
-    console.log('error', error);
-  }
-};
-
 export const addAdPicture = async (advertisementId: number, file: ReadableStream<Uint8Array>) => {
   try {
     const { data } = await database
@@ -232,27 +171,6 @@ export const addAdPicture = async (advertisementId: number, file: ReadableStream
     }
 
     return data;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export const removeAdPicture = async (advertisementId: number, pictureId: number) => {
-  try {
-    const { error } = await database
-      .from('advertisement_picture')
-      .delete()
-      .match({ 
-        advertisement_id: advertisementId, 
-        id: pictureId
-      });
-
-    await database
-      .storage
-      .from('images')
-      .remove([ `${advertisementId}_${pictureId}.png` ]);
-
-    return error;
   } catch (error) {
     console.log(error);
   }
@@ -288,28 +206,6 @@ export const markAsInterested = async (advertisementId: number, userId: string) 
     const { error } = await database
       .from('interested_in_ad')
       .insert({ user_id: userId, advertisement_id: advertisementId });
-
-    return error;
-  } catch (error) {
-    console.log('error', error);
-  }
-};
-
-export const deleteAd = async (advertisementId: number) => {
-  try {
-    const { data } = await database
-      .from('advertisement_picture')
-      .select()
-      .eq('advertisement_id', advertisementId);
-
-    data?.forEach(async (entry) => {
-      await removeAdPicture(advertisementId, entry['id']);
-    });
-
-    const { error } = await database
-      .from('advertisement')
-      .delete()
-      .eq('id', advertisementId);
 
     return error;
   } catch (error) {
