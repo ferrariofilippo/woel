@@ -1,29 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
-import { Database } from '@/interfaces/schema';
+import { createClient } from "@supabase/supabase-js";
+import { Database } from "@/types/supabase";
 
 export const SOLD_STATE = 3;
 
-export type User = Database['public']['tables']['user_data']['Update'];
-
-export type Advertisement = Database['public']['tables']['advertisement']['Row'];
-
 export const database = createClient(
-  process.env.SUPABASE_URL ?? '',
-  process.env.SUPABASE_KEY ?? ''
+  process.env.SUPABASE_URL ?? "",
+  process.env.SUPABASE_KEY ?? ""
 );
-
-export const logIn = async (email: string, password: string) => {
-  try {
-    const { data } = await database.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
 
 export const signUp = async (
   email: string,
@@ -63,46 +46,43 @@ export const signUp = async (
   }
 };
 
-export const signOut = async () => {
-  try {
-    const { error } = await database.auth.signOut();
+export type User = Database["public"]["Tables"]["user_data"]["Update"];
 
-    return error;
-  } catch (error) {
-    console.log(error);
-  }
-};
+export type Advertisement =
+  Database["public"]["Tables"]["advertisement"]["Row"];
 
 export const fetchUserById = async (userId: string) => {
   try {
     const { data } = await database
-      .from('user_data')
+      .from("user_data")
       .select(
         `user_id, first_name, last_name, class, email,
         specialization:specialization_id (specialization_name),
         school:school_id (school_name)`
       )
-      .eq('user_id', userId);
+      .eq("user_id", userId);
 
-      return data;
+    return data;
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
   }
 };
 
-export const setUserPicture = async (userId: string, file: ReadableStream<Uint8Array>) => {
+export const setUserPicture = async (
+  userId: string,
+  file: ReadableStream<Uint8Array>
+) => {
   try {
-    const { error } = await database
-      .storage
-      .from('avatars')
+    const { error } = await database.storage
+      .from("avatars")
       .upload(`${userId}.png`, file, {
-          cacheControl: '3600',
-          upsert: true
+        cacheControl: "3600",
+        upsert: true,
       });
 
-      return error;
+    return error;
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error);
   }
 };
 
@@ -116,57 +96,59 @@ export const fetchAds = async (
 ) => {
   try {
     const { data } = await database
-      .from('advertisement')
+      .from("advertisement")
       .select(
         `id, price, negotiable_price, rating, notes, status,
         book:book_id (isbn, title, author, subject, year),
         owner:owner_id (user_id, first_name, last_name, email)`
       )
-      .filter('status', 'eq', 'Available')
-      .filter('price', 'gte', parseFloat(priceGt ?? '0'))
-      .filter('price', 'lte', parseFloat(priceLt ?? '100'))
-      .filter('book.isbn', 'like', isbn ?? '%')
-      .filter('book.title', 'like', title ?? '%')
-      .filter('book.subject', 'like', subject ?? '%')
-      .or(`year.eq.${parseInt(year ?? '5')}, ${year === null}`);
+      .filter("status", "eq", "Available")
+      .filter("price", "gte", parseFloat(priceGt ?? "0"))
+      .filter("price", "lte", parseFloat(priceLt ?? "100"))
+      .filter("book.isbn", "like", isbn ?? "%")
+      .filter("book.title", "like", title ?? "%")
+      .filter("book.subject", "like", subject ?? "%")
+      .or(`year.eq.${parseInt(year ?? "5")}, ${year === null}`);
 
     return data;
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
   }
 };
 
 export const fetchAdById = async (advertisementId: number) => {
   try {
     const { data } = await database
-      .from('advertisement')
+      .from("advertisement")
       .select(
         `id, price, negotiable_price, rating, notes, status,
         book:book_id (isbn, title, author, subject, year),
         owner:owner_id (user_id, first_name, last_name, email)`
       )
-      .eq('id', advertisementId);
+      .eq("id", advertisementId);
 
-      return data;
+    return data;
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
   }
 };
 
-export const addAdPicture = async (advertisementId: number, file: ReadableStream<Uint8Array>) => {
+export const addAdPicture = async (
+  advertisementId: number,
+  file: ReadableStream<Uint8Array>
+) => {
   try {
     const { data } = await database
-      .from('advertisement_picture')
-      .insert({ id: 0, advertisement_id: advertisementId})
-      .select(); 
-    
+      .from("advertisement_picture")
+      .insert({ id: 0, advertisement_id: advertisementId })
+      .select();
+
     if (data !== null) {
-      await database
-        .storage
-        .from('avatars')
-        .upload(`${advertisementId}_${data[0]['id']}.png`, file, {
-          cacheControl: '3600',
-          upsert: true
+      await database.storage
+        .from("avatars")
+        .upload(`${advertisementId}_${data[0]["id"]}.png`, file, {
+          cacheControl: "3600",
+          upsert: true,
         });
     }
 
@@ -174,41 +156,44 @@ export const addAdPicture = async (advertisementId: number, file: ReadableStream
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 export const markAsSold = async (advertisementId: number) => {
   try {
     const { error } = await database
-      .from('advertisement')
+      .from("advertisement")
       .update({ status: SOLD_STATE })
-      .eq('id', advertisementId);
-    
+      .eq("id", advertisementId);
+
     return error;
   } catch (error) {
-    console.log('error', error)
+    console.log("error", error);
   }
 };
 
 export const saveAd = async (advertisementId: number, userId: string) => {
   try {
     const { error } = await database
-      .from('saved_ad')
+      .from("saved_ad")
       .insert({ user_id: userId, advertisement_id: advertisementId });
-    
+
     return error;
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
   }
 };
 
-export const markAsInterested = async (advertisementId: number, userId: string) => {
+export const markAsInterested = async (
+  advertisementId: number,
+  userId: string
+) => {
   try {
     const { error } = await database
-      .from('interested_in_ad')
+      .from("interested_in_ad")
       .insert({ user_id: userId, advertisement_id: advertisementId });
 
     return error;
   } catch (error) {
-    console.log('error', error);
+    console.log("error", error);
   }
 };
