@@ -8,44 +8,6 @@ export const database = createClient(
   process.env.SUPABASE_KEY ?? ""
 );
 
-export const signUp = async (
-  email: string,
-  password: string,
-  firstName: string,
-  lastName: string,
-  className: string,
-  school: number,
-  specialization: number
-) => {
-  try {
-    const { data } = await database.auth.signUp({
-      email: email,
-      password: password,
-      // TODO: Use the propert link
-      options: {
-        emailRedirectTo: 'https://localhost:3000/'
-      }
-    });
-
-    const { error } = await database
-      .from('user_data')
-      .insert({
-        user_id: data['user']?.id ?? '',
-        first_name: firstName,
-        last_name: lastName,
-        class: className,
-        school_id: school,
-        specialization_id: specialization,
-        email: email
-      }); 
-
-    console.log(error);
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export type User = Database["public"]["Tables"]["user_data"]["Update"];
 
 export type Advertisement =
@@ -81,36 +43,6 @@ export const setUserPicture = async (
       });
 
     return error;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-export const fetchAds = async (
-  priceGt: string | null,
-  priceLt: string | null,
-  isbn: string | null,
-  title: string | null,
-  subject: string | null,
-  year: string | null
-) => {
-  try {
-    const { data } = await database
-      .from("advertisement")
-      .select(
-        `id, price, negotiable_price, rating, notes, status,
-        book:book_id (isbn, title, author, subject, year),
-        owner:owner_id (user_id, first_name, last_name, email)`
-      )
-      .filter("status", "eq", "Available")
-      .filter("price", "gte", parseFloat(priceGt ?? "0"))
-      .filter("price", "lte", parseFloat(priceLt ?? "100"))
-      .filter("book.isbn", "like", isbn ?? "%")
-      .filter("book.title", "like", title ?? "%")
-      .filter("book.subject", "like", subject ?? "%")
-      .or(`year.eq.${parseInt(year ?? "5")}, ${year === null}`);
-
-    return data;
   } catch (error) {
     console.log("error", error);
   }

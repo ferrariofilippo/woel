@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
 const signInValidationSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
@@ -17,6 +18,7 @@ const signInValidationSchema = z.object({
     .nonempty(),
   password: z.string({ required_error: "Password is required" }).nonempty(),
 });
+
 const signUpValidationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
     message: "Please enter a valid email address",
@@ -36,6 +38,7 @@ const signUpValidationSchema = z.object({
       message: "Password must be at least 8 characters long",
     }),
 });
+
 type SignInValidationSchema = z.infer<typeof signInValidationSchema>;
 type SignUpValidationSchema = z.infer<typeof signUpValidationSchema>;
 
@@ -59,10 +62,10 @@ export default function AuthenticationPage() {
     },
   });
   const signUp = async (user: SignUpValidationSchema) => {
-    setIsLoading(true);
     const email = user.email;
     const password = user.password;
-
+    
+    setIsLoading(true);
     await supabase.auth.signUp({
       email,
       password,
@@ -70,23 +73,24 @@ export default function AuthenticationPage() {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    console.log(email + password);
     setIsLoading(false);
+
     setView("email");
   };
   const signIn = async (user: SignInValidationSchema) => {
-    setIsLoading(true);
     const email = user.email;
     const password = user.password;
-
+    
+    setIsLoading(true);
     await supabase.auth.signInWithPassword({
       email,
       password,
     });
     setIsLoading(false);
-    router.push("/");
+
     router.refresh();
   };
+
   return (
     <div className="container fixed top-0 left-0 right-0 h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
@@ -188,9 +192,9 @@ export default function AuthenticationPage() {
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground text-center">
-                      Don't have an account?
+                      Already have an account?
                       <Button variant="link" onClick={() => setView("sign-in")}>
-                        Sign up now!
+                        Log in now!
                       </Button>
                     </p>
                   )}
