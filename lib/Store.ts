@@ -65,31 +65,6 @@ export const fetchAdById = async (advertisementId: number) => {
   }
 };
 
-export const addAdPicture = async (
-  advertisementId: number,
-  file: ReadableStream<Uint8Array>
-) => {
-  try {
-    const { data } = await database
-      .from("advertisement_picture")
-      .insert({ id: 0, advertisement_id: advertisementId })
-      .select();
-
-    if (data !== null) {
-      await database.storage
-        .from("avatars")
-        .upload(`${advertisementId}_${data[0]["id"]}.png`, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
-    }
-
-    return data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const markAsSold = async (advertisementId: number) => {
   try {
     const { error } = await database

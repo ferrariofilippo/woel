@@ -2,9 +2,10 @@ import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { hiddenNavbarRoutes } from "@/lib/costants";
 import { headers } from "next/headers";
+import { Metadata } from "next";
 import "./globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Woel",
   description: "Woel sell and buy",
 };
