@@ -63,6 +63,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
   const [book_id, setBook] = useState("");
   const [imagesUrl, setImages] = useState(Array<string>());
   const [hasImages, setHasImages] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
 
   const addAdvertisement = async (formData: FormData) => {
     const { data } = await supabase
@@ -166,7 +167,36 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
   const cancelCreate = () => {
     removePictures();
     redirect("/");
-  }
+  };
+
+  const prevImage = (e: any) => {
+    const newIndex = imageIndex > 0 ? imageIndex - 1 : imagesUrl.length - 1;
+    const image = document.getElementById("active-image");
+    image?.classList.add("carousel-item");
+
+    setTimeout(() => {
+      setImageIndex(newIndex);
+
+      setTimeout(() => {
+        image?.classList.remove("carousel-item");
+      }, 800);
+    }, 200);
+  };
+
+  const nextImage = (e: any) => {
+    const newIndex = imageIndex < imagesUrl.length - 1 ? imageIndex + 1 : 0;
+    const image = document.getElementById("active-image");
+    image?.classList.add("carousel-item");
+
+
+    setTimeout(() => {
+      setImageIndex(newIndex);
+
+      setTimeout(() => {
+        image?.classList.remove("carousel-item");
+      }, 800);
+    }, 200);
+  };
 
   const form = useForm<Advertisement>({
     resolver: zodResolver(advertisementFormSchema),
@@ -248,32 +278,21 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
               <div
                 id="images-carousel"
                 className="relative w-full"
-                data-carousel="static"
               >
-                <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-                  {imagesUrl.map((url) => {
-                    const { data } = supabase.storage.from("images").getPublicUrl(url);
-                    return (
-                      <div
-                        className="hidden duration-700 ease-in-out"
-                        data-carousel-item=""
-                        key={data.publicUrl}
-                      >
-                        <Image
-                          width={1080}
-                          height={720}
-                          src={data.publicUrl}
-                          className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                          alt="..."
-                        />
-                      </div>
-                    )
-                  })}
+                <div className="relative h-56 overflow-hidden rounded-lg md:h-96 flex flex-col justify-center">
+                  <Image
+                    id="active-image"
+                    width={1080}
+                    height={720}
+                    src={supabase.storage.from("images").getPublicUrl(imagesUrl[imageIndex]).data.publicUrl}
+                    className="absolute block w-full"
+                    alt="..."
+                  />
                 </div>
                 <button
                   type="button"
                   className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  data-carousel-prev=""
+                  onClick={prevImage}
                 >
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
@@ -301,7 +320,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                 <button
                   type="button"
                   className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  data-carousel-next=""
+                  onClick={nextImage}
                 >
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
@@ -328,7 +347,9 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                   </span>
                 </button>
               </div>
-              <div>
+              <div
+                className="flex gap-x-2"
+              >
                 <Button
                   type="button"
                   variant="destructive"
@@ -336,6 +357,19 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                 >
                   Rimuovi
                 </Button>
+                <label
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/80 h-10 px-4 py-[0.65rem] rounded-md font-medium text-sm"
+                >
+                  Aggiungi
+                  <input
+                    id="add-file-input"
+                    type="file"
+                    className="hidden"
+                    onChange={addPictures}
+                    multiple
+                    accept=".jpg,.jpeg,.png"
+                  />
+                </label>
               </div>
             </div>
           </div>
