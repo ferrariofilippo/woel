@@ -16,7 +16,8 @@ import { Input } from "@/components/ui/input";
 import { RatingSelector } from "@/components/ui/rating-selector";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ChangeEvent, ChangeEventHandler, useState } from "react";
+import { ChangeEvent, useState } from "react";
+import Image from "next/image";
 
 const advertisementFormSchema = z.object({
   book_id: z.string(),
@@ -52,19 +53,30 @@ interface CreateAdParams {
 
 const defaultValues: Partial<Advertisement> = {
   rating: 3,
+  price: 9.99
 };
 
 export function CreateAdForm({ books, user_id }: CreateAdParams) {
   const supabase = createClientComponentClient();
 
-  const imagesUrl = Array<string>();
-
   const [rating, setRating] = useState(3);
+  const [book_id, setBook] = useState("");
+  const [imagesUrl, setImages] = useState(Array<string>());
+  const [hasImages, setHasImages] = useState(false);
 
   const addAdvertisement = async (formData: FormData) => {
     const { data } = await supabase
       .from('advertisement')
-      .insert(formData)
+      .insert({
+        owner_id: user_id,
+        book_id: formData.get("book_id")?.toString(),
+        id: undefined,
+        negotiable_price: formData.get("negotiable_price")?.toString() ?? "false",
+        notes: formData.get("notes")?.toString(),
+        price: parseFloat(formData.get("price")?.toString() ?? "9,99"),
+        rating: parseInt(formData.get("rating")?.toString() ?? "3"),
+        status: formData.get("status")?.toString()
+      })
       .select();
 
     if (!data)
@@ -80,9 +92,11 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
       });
     }
 
-    await supabase
-      .from('advertisement_picture')
-      .insert(pictures);
+    for (const picture of pictures) {
+      await supabase
+        .from('advertisement_picture')
+        .insert(picture);
+    }
 
     redirect("/");
   };
@@ -110,16 +124,47 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
         imagesUrl.push(name);
       }
     }
+
+    setHasImages(true);
   };
 
+  const addPictures = async (e: ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+
+    if (!target.files || !target.files.length)
+      return;
+
+    for (let i = 0; i < target.files.length; i++) {
+      const extension = target.files[i].name.split('.').pop();
+      if (["PNG", "JPG", "JPEG"].includes(extension?.toLocaleUpperCase() ?? "")) {
+        const name = `${crypto.randomUUID().toString()}.${extension}`;
+
+        await supabase.storage
+          .from("images")
+          .upload(name, target.files[i], {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+        imagesUrl.push(name);
+      }
+    }
+  }
+
   const removePictures = async () => {
+    if (!imagesUrl.length)
+      return;
+
     await supabase.storage.from("images").remove(imagesUrl);
 
     while (imagesUrl.length)
       imagesUrl.pop();
+
+    setHasImages(false);
   };
 
   const cancelCreate = () => {
+    removePictures();
     redirect("/");
   }
 
@@ -133,10 +178,10 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
       <form
         action={addAdvertisement}
       >
-        <input hidden value={0} name="id" />
-        <input hidden value={user_id} name="user_id" />
-        <input hidden value={"Available"} name="status" />
-        <input hidden value={rating} name="rating" />
+        <input hidden readOnly value={user_id} name="user_id" />
+        <input hidden readOnly value={book_id} name="book_id" />
+        <input hidden readOnly value={"Available"} name="status" />
+        <input hidden readOnly value={rating} name="rating" />
 
         <h1
           className="mt-5 mb-12 text-3xl font-semibold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-5xl dark:text-white text-center"
@@ -147,7 +192,12 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
           <div className="flex lg:w-1/2 md:w-2/3 w-full items-center justify-center">
             <label
               htmlFor="file-input"
-              className="flex flex-col items-center justify-center w-full md:h-full h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-accent dark:border-gray-600 dark:hover:border-gray-500"
+              className={cn(
+                "items-center justify-center w-full md:h-full h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-accent dark:border-gray-600 dark:hover:border-gray-500",
+                hasImages
+                  ? "hidden"
+                  : "flex flex-col"
+              )}
             >
               <div
                 className="flex flex-col items-center justify-center pt-5 pb-6"
@@ -184,8 +234,110 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                 className="hidden"
                 onChange={postPictures}
                 multiple
+                accept=".jpg,.jpeg,.png"
               />
             </label>
+            <div
+              className={cn(
+                "w-full md:h-full h-80",
+                hasImages
+                  ? "flex flex-col"
+                  : "hidden"
+              )}
+            >
+              <div
+                id="images-carousel"
+                className="relative w-full"
+                data-carousel="static"
+              >
+                <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+                  {imagesUrl.map((url) => {
+                    const { data } = supabase.storage.from("images").getPublicUrl(url);
+                    return (
+                      <div
+                        className="hidden duration-700 ease-in-out"
+                        data-carousel-item=""
+                        key={data.publicUrl}
+                      >
+                        <Image
+                          width={1080}
+                          height={720}
+                          src={data.publicUrl}
+                          className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                          alt="..."
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+                <button
+                  type="button"
+                  className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                  data-carousel-prev=""
+                >
+                  <span
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
+                  >
+                    <svg
+                      className="w-4 h-4 text-white dark:text-gray-800"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 6 10">
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 1 1 5l4 4" />
+                    </svg>
+                    <span
+                      className="sr-only"
+                    >
+                      Previous
+                    </span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                  data-carousel-next=""
+                >
+                  <span
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg
+                      className="w-4 h-4 text-white dark:text-gray-800"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 6 10"
+                    >
+                      <path
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="m1 9 4-4-4-4"
+                      />
+                    </svg>
+                    <span
+                      className="sr-only"
+                    >
+                      Next
+                    </span>
+                  </span>
+                </button>
+              </div>
+              <div>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={removePictures}
+                >
+                  Rimuovi
+                </Button>
+              </div>
+            </div>
           </div>
           <div className="lg:w-1/2 md:w-1/4 w-full flex flex-col gap-y-4">
             <FormField
@@ -233,7 +385,8 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                               value={book.isbn}
                               key={book.isbn}
                               onSelect={(value) => {
-                                form.setValue("book_id", value)
+                                form.setValue("book_id", value);
+                                setBook(value);
                               }}
                             >
                               <CheckIcon
@@ -328,6 +481,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
           <Button
             onClick={cancelCreate}
             variant="secondary"
+            type="button"
           >
             Annulla
           </Button>
@@ -339,6 +493,6 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
           </Button>
         </div>
       </form>
-    </Form>
+    </Form >
   );
 }
