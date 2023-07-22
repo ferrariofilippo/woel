@@ -23,8 +23,8 @@ export interface Database {
         Insert: {
           book_id: string
           id?: number
-          negotiable_price: boolean
-          notes?: string | null
+          negotiable_price: any
+          notes: string
           owner_id: string
           price: number
           rating: number
@@ -59,14 +59,17 @@ export interface Database {
         Row: {
           advertisement_id: number
           id: number
+          url: string
         }
         Insert: {
           advertisement_id: number
           id?: number
+          url: string
         }
         Update: {
           advertisement_id?: number
           id?: number
+          url: string
         }
         Relationships: [
           {

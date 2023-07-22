@@ -76,3 +76,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+.carousel-item {
+  animation: fade-away-in 1s ease-in-out;
+}
+
+@keyframes fade-away-in {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
