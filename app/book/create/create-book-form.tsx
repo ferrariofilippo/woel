@@ -45,10 +45,16 @@ export function CreateBookForm() {
   const createBook = async (formData: FormData) => {
     const { error } = await supabase
       .from('book')
-      .insert(formData);
+      .insert({
+        isbn: formData.get("isbn")?.toString(),
+        title: formData.get("title")?.toString(),
+        author: formData.get("author")?.toString(),
+        subject: formData.get("subject")?.toString(),
+        year: parseInt(formData.get("year")?.toString() ?? "3")
+      });
 
-    console.log(error);
-    // redirect("/");
+    if (!error)
+      redirect("/");
   };
 
   const cancelCreate = () => {
@@ -145,6 +151,7 @@ export function CreateBookForm() {
           <Button
             onClick={cancelCreate}
             variant="secondary"
+            type="button"
           >
             Annulla
           </Button>
