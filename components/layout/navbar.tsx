@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { MainNav } from "./navbar/main-nav";
-import { Search } from "./navbar/search";
 import { UserNav } from "./navbar/user-nav";
 
 const Navbar = async () => {
@@ -16,7 +15,6 @@ const Navbar = async () => {
       <div className="flex h-16 items-center justify-between">
         <div className="flex gap-10">
           <MainNav />
-          <Search />
         </div>
         {user ? (
           <UserNav />

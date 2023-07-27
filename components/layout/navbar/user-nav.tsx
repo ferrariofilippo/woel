@@ -1,12 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  createServerActionClient,
-  createServerComponentClient,
-} from "@supabase/auth-helpers-nextjs";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +13,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Database } from "@/types/supabase";
 import SignOutButton from "./sign-out-button";
+import { DefaultAvatar } from "@/components/ui/default-avatar";
 
 export async function UserNav() {
   const supabase = createServerComponentClient({ cookies });
@@ -27,20 +23,39 @@ export async function UserNav() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  var user_data: {
+    first_name: string,
+    last_name: string
+  } | null = null;
+
+  if (user) {
+    const { data } = await supabase
+      .from("user_data")
+      .select("first_name, last_name")
+      .eq("user_id", user.id)
+      .single();
+
+    user_data = data;
+  }
+
+  const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(`${user?.id}.png`);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src={publicUrl} alt={`@${user_data?.first_name}${user_data?.last_name}`} />
+            <AvatarFallback>
+              <DefaultAvatar />
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">{user_data?.first_name} {user_data?.last_name}</p>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email}
             </p>
@@ -49,12 +64,12 @@ export async function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            Profile
+            Profilo
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
 
           <DropdownMenuItem>
-            Settings
+            Impostazioni
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
