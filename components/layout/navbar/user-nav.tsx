@@ -43,7 +43,11 @@ export async function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full"
+          name="profile_button"
+        >
           <Avatar className="h-8 w-8">
             <AvatarImage src={publicUrl} alt={`@${user_data?.first_name}${user_data?.last_name}`} />
             <AvatarFallback>

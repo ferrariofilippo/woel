@@ -2,29 +2,29 @@ import { JoinedAd } from "@/types/joined-ad";
 import { AdvertisementDisplay } from "../ui/advertisement-display";
 
 export interface LatestAdsProps {
-  ads: JoinedAd[] | null
+  ads: JoinedAd[] | null,
+  userId: string
 }
 
-export function LatestAds({ ads }: LatestAdsProps) {  
+export function LatestAds({ ads, userId }: LatestAdsProps) {  
   return (
-    <div
-      className=""
-    >
+    <>
       <h3
-        className="font-semibold text-2xl"
+        className="font-semibold text-2xl mb-3"
       >
-        Ultimi:
+        Novità:
       </h3>
       <div
-        className=""
+        className="flex sm:flex-row flex-col flex-wrap"
       >
         {ads?.map((ad) => 
           <AdvertisementDisplay
             ad={ad}
+            userId={userId}
             key={ad.id} 
           />
         )}
       </div>
-    </div>
+    </>
   )
 }

@@ -24,7 +24,7 @@ const Navbar = async () => {
               <Button variant="ghost">Login</Button>
             </a>
             <a href="/sign-in">
-              <Button>Sell now</Button>
+              <Button>Vendi</Button>
             </a>
           </div>
         )}

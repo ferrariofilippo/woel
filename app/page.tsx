@@ -1,15 +1,12 @@
 import { LatestAds } from "@/components/home/latest-ads";
 import { MainActions } from "@/components/home/main-actions";
-import { Search } from "@/components/home/search";
+import { SearchComponent } from "@/components/ui/search";
 import { JoinedAd } from "@/types/joined-ad";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-const MIN_PRICE = 0;
-const MAX_PRICE = 100;
 const DEFAULT_YEAR = 5;
-const MATCH_ALL = "%";
 const DEFAULT_FETCH_AMOUNT = 10;
 
 export default async function Home() {
@@ -25,50 +22,17 @@ export default async function Home() {
     const { data } = await supabase
       .from("user_data")
       .select("class")
-      .eq("user_id", session.user.id);
+      .eq("user_id", session.user.id)
+      .single();
 
-    const year = data?.toString().charAt(0);
+    if (!data)
+      return undefined;
+
+    const year = data["class"].toString().charAt(0);
 
     return year && year > '0' && year < '6'
       ? parseInt(year)
       : undefined;
-  };
-
-  const getFilteredData = async (
-    year?: number,
-    priceGt?: number,
-    priceLt?: number,
-    isbn?: string,
-    title?: string,
-    subject?: string
-  ) => {
-    const { data } = await supabase
-      .from("advertisement")
-      .select(
-        `id, price, negotiable_price, rating, notes, status,
-        book:book_id (
-          isbn, title, author, subject, year
-        ),
-        owner:owner_id (
-          user_id, first_name, last_name, email
-        ),
-        advertisement_picture (
-          url
-        )`
-      )
-      .filter("status", "eq", "Available")
-      .filter("price", "gte", priceGt ?? MIN_PRICE)
-      .filter("price", "lte", priceLt ?? MAX_PRICE)
-      .filter("book.isbn", "like", isbn ?? MATCH_ALL)
-      .filter("book.title", "like", title ?? MATCH_ALL)
-      .filter("book.subject", "like", subject ?? MATCH_ALL)
-      .or(`year.eq.${year ?? DEFAULT_YEAR}, ${!year}`)
-      .order("creation_date", {
-        ascending: false
-      })
-      .limit(DEFAULT_FETCH_AMOUNT);
-
-    return data;
   };
 
   const getLatestData = async (year?: number) => {
@@ -80,13 +44,21 @@ export default async function Home() {
           isbn, title, author, subject, year
         ),
         owner:owner_id (
-          user_id, first_name, last_name, email
+          id, full_name, username, email
         ),
         advertisement_picture (
           url
-        )`
+        ),
+        saved_ad (
+          advertisement_id
+        ),
+        interested_in_ad (
+          advertisement_id
+        )
+        `
       )
-      .or(`year.eq.${year ?? DEFAULT_YEAR}, ${!year}`)
+      .not("book", "is", null)
+      .filter("book.year", "eq", year ?? DEFAULT_YEAR)
       .order("creation_date", {
         ascending: false
       })
@@ -94,22 +66,22 @@ export default async function Home() {
 
     const ads = Array<JoinedAd>();
     
-    data?.forEach(ad => ads.push(ad as JoinedAd));
+    data?.forEach(ad => ads.push(ad as unknown as JoinedAd));
 
     return ads;
   };
 
   const classYear = await getClassIfAvailable();
 
-  const data = await getFilteredData(classYear);
+  const latest = await getLatestData(classYear);
 
   return (
     <div
-      className="flex flex-col mt-5 gap-5"
+      className="flex flex-col mt-5 gap-8 mb-12"
     >
-      <Search />
+      <SearchComponent />
       <MainActions />
-      <LatestAds ads={await getLatestData(classYear)} />
+      <LatestAds ads={latest} userId={session.user.id} />
     </div>
   );
 }

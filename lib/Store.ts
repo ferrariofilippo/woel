@@ -77,30 +77,3 @@ export const markAsSold = async (advertisementId: number) => {
     console.log("error", error);
   }
 };
-
-export const saveAd = async (advertisementId: number, userId: string) => {
-  try {
-    const { error } = await database
-      .from("saved_ad")
-      .insert({ user_id: userId, advertisement_id: advertisementId });
-
-    return error;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-export const markAsInterested = async (
-  advertisementId: number,
-  userId: string
-) => {
-  try {
-    const { error } = await database
-      .from("interested_in_ad")
-      .insert({ user_id: userId, advertisement_id: advertisementId });
-
-    return error;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
