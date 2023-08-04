@@ -188,7 +188,6 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
     const image = document.getElementById("active-image");
     image?.classList.add("carousel-item");
 
-
     setTimeout(() => {
       setImageIndex(newIndex);
 

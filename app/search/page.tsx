@@ -12,7 +12,11 @@ const DEFAULT_YEAR = 5;
 const MATCH_ALL = "%";
 const DEFAULT_FETCH_AMOUNT = 10;
 
-export default async function Search() {
+export default async function Search({
+  searchParams
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const supabase = createServerComponentClient({ cookies })
   const {
     data: { session }
@@ -41,6 +45,12 @@ export default async function Search() {
         ),
         advertisement_picture (
           url
+        ),
+        saved_ad (
+          advertisement_id
+        ),
+        interested_in_ad (
+          advertisement_id
         )`
       )
       .filter("status", "eq", "Available")
@@ -61,7 +71,8 @@ export default async function Search() {
   // const data = await getFilteredData(classYear);
 
   return (
-    <>
-    </>
+    <div>
+      <SearchComponent />
+    </div>
   )
 }

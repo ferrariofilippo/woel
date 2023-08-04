@@ -1,10 +1,8 @@
-import { LatestAds } from "@/components/home/latest-ads";
-import { MainActions } from "@/components/home/main-actions";
-import { SearchComponent } from "@/components/ui/search";
 import { JoinedAd } from "@/types/joined-ad";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { AdDetails } from "./ad-details";
 
 export default async function Ad({
   searchParams
@@ -35,6 +33,12 @@ export default async function Ad({
       ),
       advertisement_picture (
         url
+      ),
+      saved_ad (
+        advertisement_id
+      ),
+      interested_in_ad (
+        advertisement_id
       )`
     )
     .eq("id", advertisementId)
@@ -46,7 +50,6 @@ export default async function Ad({
   const ad = data[0] as unknown as JoinedAd;
 
   return (
-    <>
-    </>
+    <AdDetails ad={ad} userId={session.user.id} />
   )
 }

@@ -54,8 +54,7 @@ export default async function Home() {
         ),
         interested_in_ad (
           advertisement_id
-        )
-        `
+        )`
       )
       .not("book", "is", null)
       .filter("book.year", "eq", year ?? DEFAULT_YEAR)
