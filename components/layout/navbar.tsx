@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { MainNav } from "./navbar/main-nav";
-import { Search } from "./navbar/search";
 import { UserNav } from "./navbar/user-nav";
 
 const Navbar = async () => {
@@ -12,11 +11,10 @@ const Navbar = async () => {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div className={"border-b "}>
+    <div className={"border-b relative z-50 bg-background"}>
       <div className="flex h-16 items-center justify-between">
         <div className="flex gap-10">
           <MainNav />
-          <Search />
         </div>
         {user ? (
           <UserNav />
@@ -26,7 +24,7 @@ const Navbar = async () => {
               <Button variant="ghost">Login</Button>
             </a>
             <a href="/sign-in">
-              <Button>Sell now</Button>
+              <Button>Vendi</Button>
             </a>
           </div>
         )}

@@ -18,7 +18,7 @@ export interface Database {
           owner_id: string
           price: number
           rating: number
-          status: Database["public"]["Enums"]["advertisement_status"] | null
+          status: Database["public"]["Enums"]["advertisement_status"] | null,
         }
         Insert: {
           book_id: string
