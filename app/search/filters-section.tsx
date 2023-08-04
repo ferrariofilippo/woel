@@ -79,7 +79,7 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
       tabIndex={-1}
       aria-labelledby="filters-swipe-label"
     >
-      <div className="flex flex-col p-4 gap-4 w-1/2 mx-auto">
+      <div className="flex flex-col p-4 gap-4 lg:w-1/2 md:w-2/3 w-full mx-auto">
         <div className="flex gap-2">
           <div className="w-6 h-6 my-auto">
             <svg
@@ -107,9 +107,9 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
             await filter();
           }}
         />
-        <div className="flex justify-around w-full">
+        <div className="flex justify-around w-full sm:flex-row flex-col gap-4">
           <Input
-            className="w-1/3"
+            className="xl:w-1/3 sm:w-1/2 w-full"
             type="text"
             placeholder="Materia..."
             onChange={async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +123,7 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
                 variant="outline"
                 role="combobox"
                 className={cn(
-                  "justify-between w-1/3",
+                  "justify-between xl:w-1/3 sm:w-1/2 w-full",
                   !year && "text-muted-foreground"
                 )}
               >
