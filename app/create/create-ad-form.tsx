@@ -1,7 +1,7 @@
 "use client"
 
-import * as z from "zod"
-import { redirect } from "next/navigation";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useForm } from "react-hook-form";
@@ -65,6 +65,8 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
   const [hasImages, setHasImages] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
+  const router = useRouter();
+
   const addAdvertisement = async (formData: FormData) => {
     const { data } = await supabase
       .from('advertisement')
@@ -83,48 +85,22 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
     if (!data)
       return;
 
-    const pictures = Array<AdvertisementPicture>();
-
     for (const url of imagesUrl) {
-      pictures.push({
-        advertisement_id: data[0].id,
-        id: undefined,
-        url: url
-      });
-    }
-
-    for (const picture of pictures) {
       await supabase
         .from('advertisement_picture')
-        .insert(picture);
+        .insert({
+          advertisement_id: data[0].id,
+          id: undefined,
+          url: url
+        });
     }
 
-    redirect("/");
+    router.push("/");
   };
 
   const postPictures = async (e: ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-
     await removePictures();
-
-    if (!target.files || !target.files.length)
-      return;
-
-    for (let i = 0; i < target.files.length; i++) {
-      const extension = target.files[i].name.split('.').pop();
-      if (["PNG", "JPG", "JPEG"].includes(extension?.toLocaleUpperCase() ?? "")) {
-        const name = `${crypto.randomUUID().toString()}.${extension}`;
-
-        await supabase.storage
-          .from("images")
-          .upload(name, target.files[i], {
-            cacheControl: "3600",
-            upsert: true,
-          });
-
-        imagesUrl.push(name);
-      }
-    }
+    await addPictures(e);
 
     setHasImages(true);
   };
@@ -164,32 +140,17 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
     setHasImages(false);
   };
 
-  const cancelCreate = () => {
-    removePictures();
-    redirect("/");
+  const cancelCreate = async () => {
+    await removePictures();
+    router.push("/");
   };
 
-  const prevImage = (e: any) => {
-    const newIndex = imageIndex > 0 ? imageIndex - 1 : imagesUrl.length - 1;
+  const swapToImage = (index: number) => {
     const image = document.getElementById("active-image");
     image?.classList.add("carousel-item");
 
     setTimeout(() => {
-      setImageIndex(newIndex);
-
-      setTimeout(() => {
-        image?.classList.remove("carousel-item");
-      }, 800);
-    }, 200);
-  };
-
-  const nextImage = (e: any) => {
-    const newIndex = imageIndex < imagesUrl.length - 1 ? imageIndex + 1 : 0;
-    const image = document.getElementById("active-image");
-    image?.classList.add("carousel-item");
-
-    setTimeout(() => {
-      setImageIndex(newIndex);
+      setImageIndex(index);
 
       setTimeout(() => {
         image?.classList.remove("carousel-item");
@@ -291,7 +252,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                 <button
                   type="button"
                   className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  onClick={prevImage}
+                  onClick={() => swapToImage(imageIndex > 0 ? imageIndex - 1 : imagesUrl.length - 1)}
                 >
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
@@ -319,7 +280,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                 <button
                   type="button"
                   className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-                  onClick={nextImage}
+                  onClick={() => swapToImage(imageIndex < imagesUrl.length - 1 ? imageIndex + 1 : 0)}
                 >
                   <span
                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
@@ -386,7 +347,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                           variant="outline"
                           role="combobox"
                           className={cn(
-                            "justify-between",
+                            "justify-between text-ellipsis truncate text-center px-2",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -398,7 +359,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-100 p-0">
+                    <PopoverContent className="sm:w-[24rem] w-[85vw] p-0">
                       <Command>
                         <CommandInput placeholder="Cerca un libro..." />
                         <CommandEmpty>
@@ -406,7 +367,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                             Libro non trovato.
                             <a
                               className="font-semibold"
-                              href={`${location.origin}/book/create`}
+                              href={'/book/create'}
                             >
                               Aggiungilo tu
                             </a>

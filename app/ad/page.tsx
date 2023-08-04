@@ -2,7 +2,7 @@ import { JoinedAd } from "@/types/joined-ad";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { AdDetails } from "./ad-details";
+import { AdDetails } from "@/app/ad/ad-details";
 
 export default async function Ad({
   searchParams

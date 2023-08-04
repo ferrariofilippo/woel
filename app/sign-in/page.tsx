@@ -185,7 +185,7 @@ export default function AuthenticationPage() {
                   </Button>
                   {view === "sign-in" ? (
                     <p className="text-sm text-muted-foreground text-center">
-                      Don't have an account?
+                      Don&apos;t have an account?
                       <Button variant="link" onClick={() => setView("sign-up")}>
                         Sign up now!
                       </Button>

@@ -26,13 +26,11 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
   const toggleSave = async () => {
     if (!isSaved) {
       setIsSaved(true);
-
       await supabase
         .from("saved_ad")
         .insert({ user_id: userId, advertisement_id: ad.id });
     } else {
       setIsSaved(false);
-
       await supabase
         .from("saved_ad")
         .delete()
@@ -44,13 +42,11 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
   const toggleInterest = async () => {
     if (!isInterested) {
       setIsInterested(true);
-
       await supabase
         .from("interested_in_ad")
         .insert({ user_id: userId, advertisement_id: ad.id });
     } else {
       setIsInterested(false);
-
       await supabase
         .from("interested_in_ad")
         .delete()
@@ -59,26 +55,12 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
     }
   };
 
-  const prevImage = (e: any) => {
-    const newIndex = activeImageIndex > 0 ? activeImageIndex - 1 : ad.advertisement_picture.length - 1;
+  const swapImageToIndex = (index: number) => {
     const image = document.getElementById("active-image");
     image?.classList.add("carousel-item");
 
     setTimeout(() => {
-      setActiveImageIndex(newIndex);
-      setTimeout(() => {
-        image?.classList.remove("carousel-item");
-      }, 800);
-    }, 200);
-  };
-
-  const nextImage = (e: any) => {
-    const newIndex = activeImageIndex < ad.advertisement_picture.length - 1 ? activeImageIndex + 1 : 0;
-    const image = document.getElementById("active-image");
-    image?.classList.add("carousel-item");
-
-    setTimeout(() => {
-      setActiveImageIndex(newIndex);
+      setActiveImageIndex(index);
       setTimeout(() => {
         image?.classList.remove("carousel-item");
       }, 800);
@@ -132,7 +114,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
           <button
             type="button"
             className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            onClick={prevImage}
+            onClick={() => swapImageToIndex(activeImageIndex > 0 ? activeImageIndex - 1 : ad.advertisement_picture.length - 1)}
           >
             <span
               className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none"
@@ -160,7 +142,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
           <button
             type="button"
             className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-            onClick={nextImage}
+            onClick={() => swapImageToIndex(activeImageIndex < ad.advertisement_picture.length - 1 ? activeImageIndex + 1 : 0)}
           >
             <span
               className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
@@ -199,7 +181,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
               className="rounded-full w-8 h-8"
               type="button"
               name="toggle save advertisement button"
-              onClick={() => toggleSave()}
+              onClick={toggleSave}
             >
               {isSaved
                 ? <svg
@@ -209,9 +191,9 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   ></path>
                 </svg>
                 : <svg
@@ -234,11 +216,20 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
               className="rounded-full w-8 h-8"
               type="button"
               name="toggle interest in ad advertisement button"
-              onClick={() => toggleInterest()}
+              onClick={toggleInterest}
             >
               {isInterested
-                ? <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path clip-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" fill-rule="evenodd"></path>
+                ? <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    clipRule="evenodd"
+                    d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                    fillRule="evenodd"
+                  ></path>
                 </svg>
                 : <svg
                   aria-hidden="true"
@@ -264,7 +255,10 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
           {ad.book.title}
         </h4>
         <span className="font-medium text-2xl">
-          € {ad.price.toPrecision(4)}
+          € {ad.price < 10
+            ? ad.price.toPrecision(3)
+            : ad.price.toPrecision(4)
+          }
         </span>
         <table className="w-full">
           <tbody>

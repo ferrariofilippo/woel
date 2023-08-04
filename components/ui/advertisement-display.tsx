@@ -114,7 +114,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
               className="rounded-full w-6 h-6"
               type="button"
               name="toggle save advertisement button"
-              onClick={() => toggleSave()}
+              onClick={toggleSave}
             >
               {isSaved
                 ? <svg
@@ -124,9 +124,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   ></path>
                 </svg>
                 : <svg
@@ -149,7 +149,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
               className="rounded-full w-6 h-6"
               type="button"
               name="toggle interest in ad advertisement button"
-              onClick={() => toggleInterest()}
+              onClick={toggleInterest}
             >
               {isInterested
                 ? <svg
@@ -159,9 +159,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   ></path>
                 </svg>
                 : <svg

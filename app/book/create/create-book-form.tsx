@@ -1,7 +1,7 @@
 "use client"
 
 import * as z from "zod"
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/supabase";
 import { useForm } from "react-hook-form";
@@ -39,6 +39,7 @@ const defaultValues: Partial<Book> = {
 
 export function CreateBookForm() {
   const supabase = createClientComponentClient();
+  const router = useRouter();
 
   const [year, setYear] = useState(3);
 
@@ -54,12 +55,8 @@ export function CreateBookForm() {
       });
 
     if (!error)
-      redirect("/");
+      router.push("/");
   };
-
-  const cancelCreate = () => {
-    redirect("/");
-  }
 
   const form = useForm<Book>({
     resolver: zodResolver(bookFormSchema),
@@ -72,7 +69,7 @@ export function CreateBookForm() {
         action={createBook}
         className="flex flex-col gap-y-4 md:w-1/2 w-full mx-auto"
       >
-        <input hidden value={year} name="rating" />
+        <input hidden value={year} readOnly name="rating" />
 
         <h1
           className="mt-5 mb-8 text-3xl font-semibold tracking-tight leading-none text-gray-900 md:text-4xl lg:text-5xl dark:text-white text-center"
@@ -149,7 +146,7 @@ export function CreateBookForm() {
         />
         <div className="flex gap-x-2 w-full justify-end mt-3">
           <Button
-            onClick={cancelCreate}
+            onClick={() => router.push("/")}
             variant="secondary"
             type="button"
           >
