@@ -16,7 +16,7 @@ export function RatingSelector({
   return (
     <div className="grid gap-4">
       <div className="flex items-center justify-between">
-        <Label htmlFor="temperature">Condizioni</Label>
+        <Label htmlFor="rating">Condizioni</Label>
         <span className="rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
           {rating} - {
             rating

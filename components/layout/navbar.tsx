@@ -11,7 +11,7 @@ const Navbar = async () => {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div className={"border-b "}>
+    <div className={"border-b relative z-50 bg-background"}>
       <div className="flex h-16 items-center justify-between">
         <div className="flex gap-10">
           <MainNav />

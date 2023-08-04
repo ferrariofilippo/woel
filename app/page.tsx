@@ -1,6 +1,6 @@
 import { LatestAds } from "@/components/home/latest-ads";
 import { MainActions } from "@/components/home/main-actions";
-import { SearchComponent } from "@/components/ui/search";
+import { SearchComponent } from "@/components/ui/search-component";
 import { JoinedAd } from "@/types/joined-ad";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";

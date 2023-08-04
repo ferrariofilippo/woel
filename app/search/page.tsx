@@ -1,78 +1,95 @@
-import { LatestAds } from "@/components/home/latest-ads";
-import { MainActions } from "@/components/home/main-actions";
-import { SearchComponent } from "@/components/ui/search";
-import { JoinedAd } from "@/types/joined-ad";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+"use client"
 
-const MIN_PRICE = 0;
-const MAX_PRICE = 100;
-const DEFAULT_YEAR = 5;
-const MATCH_ALL = "%";
+import { JoinedAd } from "@/types/joined-ad";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import { FiltersSection } from "./filters-section";
+import { AdvertisementDisplay } from "@/components/ui/advertisement-display";
+import { useEffect, useState } from "react";
+
 const DEFAULT_FETCH_AMOUNT = 10;
 
-export default async function Search({
+export default function Search({
   searchParams
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const supabase = createServerComponentClient({ cookies })
-  const {
-    data: { session }
-  } = await supabase.auth.getSession();
+  const router = useRouter();
+  const supabase = createClientComponentClient();
+  const [ads, setAds] = useState(Array<JoinedAd>());
+  const [userId, setUserId] = useState("");
 
-  if (!session)
-    redirect("/sign-in");
+  var query = searchParams?.q ?? "";
+  if (typeof query === typeof [""])
+    query = query[0];
 
-  const getFilteredData = async (
-    year?: number,
-    priceGt?: number,
-    priceLt?: number,
-    isbn?: string,
-    title?: string,
-    subject?: string
-  ) => {
-    const { data } = await supabase
+
+  useEffect(() => {
+    supabase.auth
+      .getSession()
+      .then((data) => {
+        if (!data.data.session)
+          router.push("sign-in");
+        else
+          setUserId(data.data.session.user.id);
+      });
+
+    supabase
       .from("advertisement")
       .select(
         `id, price, negotiable_price, rating, notes, status,
-        book:book_id (
-          isbn, title, author, subject, year
-        ),
-        owner:owner_id (
-          user_id, first_name, last_name, email
-        ),
-        advertisement_picture (
-          url
-        ),
-        saved_ad (
-          advertisement_id
-        ),
-        interested_in_ad (
-          advertisement_id
-        )`
+      book:book_id (
+        isbn, title, author, subject, year
+      ),
+      owner:owner_id (
+        id, full_name, username, email
+      ),
+      advertisement_picture (
+        url
+      ),
+      saved_ad (
+        advertisement_id
+      ),
+      interested_in_ad (
+        advertisement_id
+      )`
       )
       .filter("status", "eq", "Available")
-      .filter("price", "gte", priceGt ?? MIN_PRICE)
-      .filter("price", "lte", priceLt ?? MAX_PRICE)
-      .filter("book.isbn", "like", isbn ?? MATCH_ALL)
-      .filter("book.title", "like", title ?? MATCH_ALL)
-      .filter("book.subject", "like", subject ?? MATCH_ALL)
-      .or(`year.eq.${year ?? DEFAULT_YEAR}, ${!year}`)
+      .not("book", "is", null)
+      .filter("price", "lte", 50.0)
+      .or(`isbn.like.%${query}%,title.ilike.%${query}%`, { foreignTable: "book" })
       .order("creation_date", {
         ascending: false
       })
-      .limit(DEFAULT_FETCH_AMOUNT);
+      .limit(DEFAULT_FETCH_AMOUNT)
+      .then((data) => {
+        const ads = Array<JoinedAd>();
+        data.data?.forEach(ad => ads.push(ad as unknown as JoinedAd));
 
-    return data;
-  };
-
-  // const data = await getFilteredData(classYear);
+        setAds(ads);
+      })
+  }, []);
 
   return (
-    <div>
-      <SearchComponent />
+    <div className="mt-5 mb-12">
+      <FiltersSection
+        setData={setAds}
+        supabase={supabase}
+      />
+      <div className="mt-[calc(32px+1rem)]">
+        <h4 className="font-semibold text-xl ms-1">
+          Ecco i risultati della tua ricerca
+        </h4>
+        <div className="flex sm:flex-row flex-col flex-wrap mt-5">
+          {ads?.map((ad) =>
+            <AdvertisementDisplay
+              userId={userId}
+              ad={ad}
+              key={ad.id}
+            />
+          )}
+        </div>
+      </div>
     </div>
   )
 }
