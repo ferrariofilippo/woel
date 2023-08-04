@@ -235,66 +235,68 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
           € {ad.price.toPrecision(4)}
         </span>
         <table className="w-full">
-          <tr>
-            <td className="font-semibold">
-              ISBN
-            </td>
-            <td className="tracking-wide">
-              {ad.book.isbn}
-            </td>
-          </tr>
-          <tr>
-            <td className="font-semibold">
-              Autore
-            </td>
-            <td>
-              {ad.book.author}
-            </td>
-          </tr>
-          <tr>
-            <td className="font-semibold">
-              Materia
-            </td>
-            <td>
-              {ad.book.subject}
-            </td>
-          </tr>
-          <tr>
-            <td className="font-semibold">
-              Anno
-            </td>
-            <td>
-              {ad.book.year}
-            </td>
-          </tr>
-          <tr>
-            <td className="font-semibold">
-              Prezzo negoziabile
-            </td>
-            <td>
-              {ad.negotiable_price
-                ? <span>Sì &#x2714;</span>
-                : <span>No &#x2716;</span>
-              }
-            </td>
-          </tr>
-          <tr>
-            <td className="font-semibold">
-              Condizioni
-            </td>
-            <td>
-              {ad.rating === 1
-                ? <span>Pessime &#x1F61F;</span>
-                : ad.rating === 2
-                  ? <span>Mediocri &#x1F60C;</span>
-                  : ad.rating === 3
-                    ? <span>Discrete &#x1F610;</span>
-                    : ad.rating === 4
-                      ? <span>Buone &#x1F615;</span>
-                      : <span>Ottime &#x1F604;</span>
-              }
-            </td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className="font-semibold">
+                ISBN
+              </td>
+              <td className="tracking-wide">
+                {ad.book.isbn}
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold">
+                Autore
+              </td>
+              <td>
+                {ad.book.author}
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold">
+                Materia
+              </td>
+              <td>
+                {ad.book.subject}
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold">
+                Anno
+              </td>
+              <td>
+                {ad.book.year}
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold">
+                Prezzo negoziabile
+              </td>
+              <td>
+                {ad.negotiable_price
+                  ? <span>Sì &#x2714;</span>
+                  : <span>No &#x2716;</span>
+                }
+              </td>
+            </tr>
+            <tr>
+              <td className="font-semibold">
+                Condizioni
+              </td>
+              <td>
+                {ad.rating === 1
+                  ? <span>Pessime &#x1F61F;</span>
+                  : ad.rating === 2
+                    ? <span>Mediocri &#x1F60C;</span>
+                    : ad.rating === 3
+                      ? <span>Discrete &#x1F610;</span>
+                      : ad.rating === 4
+                        ? <span>Buone &#x1F615;</span>
+                        : <span>Ottime &#x1F604;</span>
+                }
+              </td>
+            </tr>
+          </tbody>
         </table>
         <Button className="mt-8">
           <a

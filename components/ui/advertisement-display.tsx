@@ -81,9 +81,10 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
       >
         {ad.advertisement_picture[0]
           ? <Image
-            src={ad.advertisement_picture[0].url}
+            className="w-full"
+            src={supabase.storage.from("images").getPublicUrl(ad.advertisement_picture[0].url).data.publicUrl}
             alt={ad.book.title}
-            width={100}
+            width={360}
             height={200}
           />
           : <div className="flex items-center justify-center w-full h-full rounded">
