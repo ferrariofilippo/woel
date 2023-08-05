@@ -6,7 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { DefaultAvatar } from "./default-avatar";
 import Image from "next/image";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import styles from "@/components/styles/advertisement.animations.module.css";
 
 export interface AdvertisementDisplayParams {
   ad: JoinedAd,
@@ -20,7 +21,11 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
   const [isSaved, setIsSaved] = useState(ad.saved_ad.length !== 0);
   const [isInterested, setIsInterested] = useState(ad.interested_in_ad.length !== 0);
 
-  const toggleSave = async () => {
+  const router = useRouter();
+
+  const toggleSave = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     if (!isSaved) {
       setIsSaved(true);
 
@@ -38,7 +43,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
     }
   };
 
-  const toggleInterest = async () => {
+  const toggleInterest = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     if (!isInterested) {
       setIsInterested(true);
 
@@ -57,9 +64,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
   };
   
   return (
-    <Link
-      href={`/ad?id=${ad.id}`}
-      className="xl:w-1/4 lg:w-1/3 sm:w-1/2 w-full flex flex-col sm:px-4 px-0 pb-8"
+    <div
+      onClick={() => router.push(`/ad?id=${ad.id}`)}
+      className="xl:w-1/4 lg:w-1/3 sm:w-1/2 w-full flex flex-col sm:px-4 p-2 mb-4 hover:px-3 hover:mb-3 hover:border-2 hover:rounded-lg hover:border-neutral-600"
     >
       <div
         className="flex gap-2"
@@ -114,22 +121,24 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
               className="rounded-full w-6 h-6"
               type="button"
               name="toggle save advertisement button"
-              onClick={() => toggleSave()}
+              onClick={toggleSave}
             >
               {isSaved
                 ? <svg
+                  className={styles.hoverpulse}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M6.32 2.577a49.255 49.255 0 0111.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.085.67L12 18.089l-7.165 3.583A.75.75 0 013.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93z"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   ></path>
                 </svg>
                 : <svg
+                  className={styles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
@@ -149,22 +158,24 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
               className="rounded-full w-6 h-6"
               type="button"
               name="toggle interest in ad advertisement button"
-              onClick={() => toggleInterest()}
+              onClick={toggleInterest}
             >
               {isInterested
                 ? <svg
+                  className={styles.hoverspin}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                     d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                   ></path>
                 </svg>
                 : <svg
+                  className={styles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
@@ -188,6 +199,6 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
           {ad.book.title}
         </p>
       </div>
-    </Link>
+    </div>
   );
 }

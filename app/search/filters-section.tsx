@@ -13,18 +13,15 @@ import { CheckIcon } from "@radix-ui/react-icons";
 import { SupabaseClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
 
-const MIN_PRICE = 0;
-const MAX_PRICE = 100;
-const DEFAULT_YEAR = 5;
-const MATCH_ALL = "%";
 const DEFAULT_FETCH_AMOUNT = 10;
 
 interface FiltersSectionParams {
   setData: Function,
-  supabase: SupabaseClient<any, "public", any>
+  supabase: SupabaseClient<any, "public", any>,
+  userId: string
 }
 
-export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
+export function FiltersSection({ setData, supabase, userId }: FiltersSectionParams) {
   const [subject, setSubject] = useState("");
   const [year, setYear] = useState(0);
   const [price, setPrice] = useState(50.0);
@@ -54,6 +51,7 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
       )`
       )
       .filter("status", "eq", "Available")
+      .filter("owner_id", "neq", userId)
       .not("book", "is", null)
       .filter("price", "lte", price)
       .ilike("book.subject", `%${subject}%`)
@@ -75,7 +73,7 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
   return (
     <div
       id="filters-drawer"
-      className="fixed z-40 sm:w-[calc(100%-12rem)] w-[calc(100%-3rem)] overflow-y-auto bg-white border-b border-neutral-200 rounded-b-lg dark:border-neutral-800 dark:bg-neutral-900 transition-transform top-[64px] -translate-y-[236px]"
+      className="absolute z-40 sm:w-[calc(100%-12rem)] w-[calc(100%-3rem)] overflow-y-auto bg-white border-b border-neutral-200 rounded-b-lg dark:border-neutral-800 dark:bg-neutral-900 transition-transform top-[64px] sm:-translate-y-[236px] -translate-y-[292px]"
       tabIndex={-1}
       aria-labelledby="filters-swipe-label"
     >
@@ -189,9 +187,11 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
         onClick={() => {
           const drawer = document.getElementById("filters-drawer");
           if (isFilterSectionExpanded) {
-            drawer?.classList.add("-translate-y-[236px]");
+            drawer?.classList.add("sm:-translate-y-[236px]");
+            drawer?.classList.add("-translate-y-[292px]");
           } else {
-            drawer?.classList.remove("-translate-y-[236px]");
+            drawer?.classList.remove("sm:-translate-y-[236px]");
+            drawer?.classList.remove("-translate-y-[292px]");
           }
 
           isFilterSectionExpanded = !isFilterSectionExpanded;

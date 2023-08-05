@@ -3,8 +3,6 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { CreateAdForm } from "@/app/create/create-ad-form";
 import { redirect } from "next/navigation";
 
-export const revalidate = 300;
-
 export default async function Create() {
   const supabase = createServerComponentClient({ cookies });
   const { 

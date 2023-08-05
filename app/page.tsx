@@ -57,6 +57,7 @@ export default async function Home() {
         )`
       )
       .not("book", "is", null)
+      .neq("owner_id", session.user.id)
       .filter("book.year", "eq", year ?? DEFAULT_YEAR)
       .order("creation_date", {
         ascending: false
