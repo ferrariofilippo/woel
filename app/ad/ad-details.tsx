@@ -9,6 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DefaultAvatar } from "@/components/ui/default-avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import styles from "@/components/styles/caousel.module.css";
+import adStyles from "@/components/styles/advertisement.animations.module.css";
 
 interface AdDetailsParams {
   ad: JoinedAd,
@@ -57,12 +59,12 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
 
   const swapImageToIndex = (index: number) => {
     const image = document.getElementById("active-image");
-    image?.classList.add("carousel-item");
+    image?.classList.add(styles.carouselitem);
 
     setTimeout(() => {
       setActiveImageIndex(index);
       setTimeout(() => {
-        image?.classList.remove("carousel-item");
+        image?.classList.remove(styles.carouselitem);
       }, 800);
     }, 200);
   };
@@ -185,6 +187,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
             >
               {isSaved
                 ? <svg
+                  className={adStyles.hoverpulse}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -197,6 +200,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
                   ></path>
                 </svg>
                 : <svg
+                  className={adStyles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
@@ -220,6 +224,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
             >
               {isInterested
                 ? <svg
+                  className={adStyles.hoverspin}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -232,6 +237,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
                   ></path>
                 </svg>
                 : <svg
+                  className={adStyles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"

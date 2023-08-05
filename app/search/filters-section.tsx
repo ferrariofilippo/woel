@@ -17,10 +17,11 @@ const DEFAULT_FETCH_AMOUNT = 10;
 
 interface FiltersSectionParams {
   setData: Function,
-  supabase: SupabaseClient<any, "public", any>
+  supabase: SupabaseClient<any, "public", any>,
+  userId: string
 }
 
-export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
+export function FiltersSection({ setData, supabase, userId }: FiltersSectionParams) {
   const [subject, setSubject] = useState("");
   const [year, setYear] = useState(0);
   const [price, setPrice] = useState(50.0);
@@ -50,6 +51,7 @@ export function FiltersSection({ setData, supabase }: FiltersSectionParams) {
       )`
       )
       .filter("status", "eq", "Available")
+      .filter("owner_id", "neq", userId)
       .not("book", "is", null)
       .filter("price", "lte", price)
       .ilike("book.subject", `%${subject}%`)

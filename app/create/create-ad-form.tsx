@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
+import styles from "@/components/styles/caousel.module.css";
 
 const advertisementFormSchema = z.object({
   book_id: z.string(),
@@ -147,13 +148,13 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
 
   const swapToImage = (index: number) => {
     const image = document.getElementById("active-image");
-    image?.classList.add("carousel-item");
+    image?.classList.add(styles.carouselitem);
 
     setTimeout(() => {
       setImageIndex(index);
 
       setTimeout(() => {
-        image?.classList.remove("carousel-item");
+        image?.classList.remove(styles.carouselitem);
       }, 800);
     }, 200);
   };

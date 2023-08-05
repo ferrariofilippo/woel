@@ -35,42 +35,43 @@ export default function Search({
           router.push("sign-in");
         else
           setUserId(data.data.session.user.id);
+
+        supabase
+          .from("advertisement")
+          .select(
+            `id, price, negotiable_price, rating, notes, status,
+          book:book_id (
+            isbn, title, author, subject, year
+          ),
+          owner:owner_id (
+            id, full_name, username, email
+          ),
+          advertisement_picture (
+            url
+          ),
+          saved_ad (
+            advertisement_id
+          ),
+          interested_in_ad (
+            advertisement_id
+          )`
+          )
+          .filter("status", "eq", "Available")
+          .neq("owner_id", data.data.session?.user.id ?? "")
+          .not("book", "is", null)
+          .filter("price", "lte", 50.0)
+          .or(`isbn.like.%${query}%,title.ilike.%${query}%`, { foreignTable: "book" })
+          .order("creation_date", {
+            ascending: false
+          })
+          .limit(DEFAULT_FETCH_AMOUNT)
+          .then((data) => {
+            const ads = Array<JoinedAd>();
+            data.data?.forEach(ad => ads.push(ad as unknown as JoinedAd));
+
+            setAds(ads);
+          });
       });
-
-    supabase
-      .from("advertisement")
-      .select(
-        `id, price, negotiable_price, rating, notes, status,
-      book:book_id (
-        isbn, title, author, subject, year
-      ),
-      owner:owner_id (
-        id, full_name, username, email
-      ),
-      advertisement_picture (
-        url
-      ),
-      saved_ad (
-        advertisement_id
-      ),
-      interested_in_ad (
-        advertisement_id
-      )`
-      )
-      .filter("status", "eq", "Available")
-      .not("book", "is", null)
-      .filter("price", "lte", 50.0)
-      .or(`isbn.like.%${query}%,title.ilike.%${query}%`, { foreignTable: "book" })
-      .order("creation_date", {
-        ascending: false
-      })
-      .limit(DEFAULT_FETCH_AMOUNT)
-      .then((data) => {
-        const ads = Array<JoinedAd>();
-        data.data?.forEach(ad => ads.push(ad as unknown as JoinedAd));
-
-        setAds(ads);
-      })
   }, [query, router, supabase]);
 
   return (
@@ -78,6 +79,7 @@ export default function Search({
       <FiltersSection
         setData={setAds}
         supabase={supabase}
+        userId={userId}
       />
       <div className="mt-[calc(32px+1rem)]">
         <h4 className="font-semibold text-xl ms-1">

@@ -10,7 +10,7 @@ export function LatestAds({ ads, userId }: LatestAdsProps) {
   return (
     <>
       <h3
-        className="font-semibold text-2xl mb-3"
+        className="font-semibold text-2xl -mb-3"
       >
         Novità:
       </h3>

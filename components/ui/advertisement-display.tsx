@@ -6,7 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 import { DefaultAvatar } from "./default-avatar";
 import Image from "next/image";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
+import styles from "@/components/styles/advertisement.animations.module.css";
 
 export interface AdvertisementDisplayParams {
   ad: JoinedAd,
@@ -20,7 +21,11 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
   const [isSaved, setIsSaved] = useState(ad.saved_ad.length !== 0);
   const [isInterested, setIsInterested] = useState(ad.interested_in_ad.length !== 0);
 
-  const toggleSave = async () => {
+  const router = useRouter();
+
+  const toggleSave = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     if (!isSaved) {
       setIsSaved(true);
 
@@ -38,7 +43,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
     }
   };
 
-  const toggleInterest = async () => {
+  const toggleInterest = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
     if (!isInterested) {
       setIsInterested(true);
 
@@ -57,9 +64,9 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
   };
   
   return (
-    <Link
-      href={`/ad?id=${ad.id}`}
-      className="xl:w-1/4 lg:w-1/3 sm:w-1/2 w-full flex flex-col sm:px-4 px-0 pb-8"
+    <div
+      onClick={() => router.push(`/ad?id=${ad.id}`)}
+      className="xl:w-1/4 lg:w-1/3 sm:w-1/2 w-full flex flex-col sm:px-4 p-2 mb-4 hover:px-3 hover:mb-3 hover:border-2 hover:rounded-lg hover:border-neutral-600"
     >
       <div
         className="flex gap-2"
@@ -118,6 +125,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
             >
               {isSaved
                 ? <svg
+                  className={styles.hoverpulse}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -130,6 +138,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
                   ></path>
                 </svg>
                 : <svg
+                  className={styles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
@@ -153,6 +162,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
             >
               {isInterested
                 ? <svg
+                  className={styles.hoverspin}
                   aria-hidden="true"
                   fill="currentColor"
                   viewBox="0 0 24 24"
@@ -165,6 +175,7 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
                   ></path>
                 </svg>
                 : <svg
+                  className={styles.hovershake}
                   aria-hidden="true"
                   fill="none"
                   stroke="currentColor"
@@ -188,6 +199,6 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
           {ad.book.title}
         </p>
       </div>
-    </Link>
+    </div>
   );
 }
