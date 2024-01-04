@@ -21,7 +21,7 @@ export default function Info() {
       <p
         className="text-center text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400"
       >
-        È appena finito l&apos;anno e non vedete l&apos;ora di sbarazzarvi dei vostri libri? Grazie a Woel potrete create degli annunci visibili a tutti gli studenti della vostra scuola!<br/>
+        È appena finito l&apos;anno e non vedete l&apos;ora di sbarazzarvi dei vostri libri? Grazie a Woel potrete create degli annunci visibili a tutti gli studenti della vostra scuola!<br />
         Vi servono dei libri ma volete risparmiare comprandoli usati? Woel vi permette di consultare centinaia di annunci filtrandoli in base a libro offerto, prezzo, condizioni e molto altro!
       </p>
     </>

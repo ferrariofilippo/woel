@@ -6,7 +6,7 @@ export interface LatestAdsProps {
   userId: string
 }
 
-export function LatestAds({ ads, userId }: LatestAdsProps) {  
+export function LatestAds({ ads, userId }: LatestAdsProps) {
   return (
     <>
       <h3
@@ -17,11 +17,11 @@ export function LatestAds({ ads, userId }: LatestAdsProps) {
       <div
         className="flex sm:flex-row flex-col flex-wrap"
       >
-        {ads?.map((ad) => 
+        {ads?.map((ad) =>
           <AdvertisementDisplay
             ad={ad}
             userId={userId}
-            key={ad.id} 
+            key={ad.id}
           />
         )}
       </div>

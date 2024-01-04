@@ -3,11 +3,14 @@
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { Icons } from "@/components/icons";
 
 const SignOutButton = () => {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -17,7 +20,7 @@ const SignOutButton = () => {
     setIsLoading(false);
     router.refresh();
   };
-  
+
   return (
     <DropdownMenuItem onClick={signOut} disabled={isLoading}>
       Log out

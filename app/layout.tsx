@@ -11,12 +11,19 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({
-  children,
-  isNavbarHidden,
+  children
 }: {
   children: React.ReactNode;
   isNavbarHidden: boolean;
 }) {
+  const headersList = headers();
+  const fullUrl = headersList.get("referer") || "";
+  const currentPagePath = fullUrl
+    .split(process.env.APP_DOMAIN!)
+    .slice(-1)
+    .pop();
+  const isNavbarHidden = hiddenNavbarRoutes.includes(currentPagePath!);
+
   return (
     <html lang="en">
       <body className="sm:px-24 px-6">
@@ -27,19 +34,4 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
-export async function getServerSideProps() {
-  const headersList = headers();
-  const fullUrl = headersList.get("referer") || "";
-  const currentPagePath = fullUrl
-    .split(process.env.APP_DOMAIN!)
-    .slice(-1)
-    .pop();
-  const isNavbarHidden = hiddenNavbarRoutes.includes(currentPagePath!);
-
-  return {
-    props: {
-      isNavbarHidden: isNavbarHidden,
-    },
-  };
 }

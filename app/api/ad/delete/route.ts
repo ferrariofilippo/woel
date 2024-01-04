@@ -1,4 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
@@ -7,7 +7,25 @@ export async function GET(request: Request) {
   if (!id)
     return NextResponse.error();
 
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          cookieStore.set({ name, value, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          cookieStore.set({ name, value: '', ...options });
+        },
+      },
+    }
+  );
   const { data } = await supabase
     .from('advertisement_picture')
     .select()
@@ -17,15 +35,15 @@ export async function GET(request: Request) {
     await supabase
       .from('advertisement_picture')
       .delete()
-      .match({ 
-        advertisement_id: id, 
+      .match({
+        advertisement_id: id,
         id: entry['id']
       });
 
     await supabase
       .storage
       .from('images')
-      .remove([ `${id}_${entry['id']}.png` ]);
+      .remove([`${id}_${entry['id']}.png`]);
   });
 
   const { error } = await supabase

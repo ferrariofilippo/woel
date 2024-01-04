@@ -1,13 +1,30 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-import { Database } from '@/interfaces/schema';
+import { Database } from '@/types/supabase';
 
-export type Advertisement = Database['public']['tables']['advertisement']['Update'];
+export type Advertisement = Database['public']['Tables']['advertisement']['Update'];
 
 export async function PUT(request: Request) {
   const ad: Advertisement = await request.json();
-  const supabase = createRouteHandlerClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          cookieStore.set({ name, value, ...options });
+        },
+        remove(name: string, options: CookieOptions) {
+          cookieStore.set({ name, value: '', ...options });
+        },
+      },
+    }
+  );
 
   const { error } = await supabase
     .from('advertisement')
@@ -18,7 +35,7 @@ export async function PUT(request: Request) {
       negotiable_price: ad.negotiable_price,
       rating: ad.rating,
       notes: ad.notes,
-      status: ad.status  
+      status: ad.status
     })
     .eq('id', ad.id);
 

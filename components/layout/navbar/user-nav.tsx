@@ -1,8 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +16,19 @@ import SignOutButton from "./sign-out-button";
 import { DefaultAvatar } from "@/components/ui/default-avatar";
 
 export async function UserNav() {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        }
+      },
+    }
+  );
 
   const {
     data: { user },
