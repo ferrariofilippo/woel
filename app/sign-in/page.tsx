@@ -5,7 +5,7 @@ import { Button } from "@/components/ui";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,9 +14,8 @@ import { z } from "zod";
 const signInValidationSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
-    .email("Not a valid email")
-    .nonempty(),
-  password: z.string({ required_error: "Password is required" }).nonempty(),
+    .email("Not a valid email"),
+  password: z.string({ required_error: "Password is required" }),
 });
 
 const signUpValidationSchema = z.object({
@@ -46,7 +45,10 @@ export default function AuthenticationPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState("sign-in");
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
   const {
     register,
     handleSubmit,
@@ -64,7 +66,7 @@ export default function AuthenticationPage() {
   const signUp = async (user: SignUpValidationSchema) => {
     const email = user.email;
     const password = user.password;
-    
+
     setIsLoading(true);
     await supabase.auth.signUp({
       email,
@@ -80,7 +82,7 @@ export default function AuthenticationPage() {
   const signIn = async (user: SignInValidationSchema) => {
     const email = user.email;
     const password = user.password;
-    
+
     setIsLoading(true);
     await supabase.auth.signInWithPassword({
       email,

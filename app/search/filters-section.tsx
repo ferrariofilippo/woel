@@ -99,7 +99,7 @@ export function FiltersSection({ setData, supabase, userId }: FiltersSectionPara
             Filtri
           </h1>
         </div>
-        <SearchComponent 
+        <SearchComponent
           onChangeHandler={async (event: React.ChangeEvent<HTMLInputElement>) => {
             setQuery(event.target.value);
             await filter();

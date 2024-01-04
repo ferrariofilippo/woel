@@ -2,7 +2,7 @@
 
 import * as z from "zod"
 import { useRouter } from "next/navigation";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { Database } from "@/types/supabase";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,17 +14,14 @@ import { useState } from "react";
 
 const bookFormSchema = z.object({
   author: z
-    .string()
-    .nonempty(),
+    .string(),
   isbn: z
     .string()
     .length(13, "L'ISBN deve essere lungo 13 caratteri"),
   subject: z
-    .string()
-    .nonempty(),
+    .string(),
   title: z
-    .string()
-    .nonempty(),
+    .string(),
   year: z
     .number()
     .min(1, "L'Anno deve essere compreso tra 1 e 5")
@@ -38,7 +35,10 @@ const defaultValues: Partial<Book> = {
 };
 
 export function CreateBookForm() {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
   const router = useRouter();
 
   const [year, setYear] = useState(3);

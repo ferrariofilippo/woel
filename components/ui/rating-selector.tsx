@@ -20,7 +20,7 @@ export function RatingSelector({
         <span className="rounded-md border border-transparent px-2 py-0.5 text-right text-sm text-muted-foreground hover:border-border">
           {rating} - {
             rating
-              ? rating === 1 
+              ? rating === 1
                 ? "Pessime"
                 : rating === 2
                   ? "Mediocri"

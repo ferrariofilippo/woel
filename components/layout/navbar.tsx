@@ -1,11 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { MainNav } from "./navbar/main-nav";
 import { UserNav } from "./navbar/user-nav";
 
 const Navbar = async () => {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        }
+      },
+    }
+  )
 
   const {
     data: { user },

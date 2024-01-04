@@ -1,7 +1,7 @@
 "use client"
 
 import { JoinedAd } from "@/types/joined-ad";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { Button } from "@/components/ui";
 import { useState } from "react";
 import Image from "next/image";
@@ -18,7 +18,10 @@ interface AdDetailsParams {
 }
 
 export function AdDetails({ ad, userId }: AdDetailsParams) {
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
   const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(`${ad.owner.user_id}.png`);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);

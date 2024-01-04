@@ -2,7 +2,7 @@ import { LatestAds } from "@/components/home/latest-ads";
 import { MainActions } from "@/components/home/main-actions";
 import { SearchComponent } from "@/components/ui/search-component";
 import { JoinedAd } from "@/types/joined-ad";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -10,7 +10,18 @@ const DEFAULT_YEAR = 5;
 const DEFAULT_FETCH_AMOUNT = 10;
 
 export default async function Home() {
-  const supabase = createServerComponentClient({ cookies })
+  const cookieStore = cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        get(name: string) {
+          return cookieStore.get(name)?.value;
+        }
+      },
+    }
+  );
   const {
     data: { session }
   } = await supabase.auth.getSession();
@@ -65,7 +76,7 @@ export default async function Home() {
       .limit(DEFAULT_FETCH_AMOUNT);
 
     const ads = Array<JoinedAd>();
-    
+
     data?.forEach(ad => ads.push(ad as unknown as JoinedAd));
 
     return ads;
