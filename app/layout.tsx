@@ -26,7 +26,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className="sm:px-24 px-6">
+      <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {!isNavbarHidden && <Navbar />}
           {children}

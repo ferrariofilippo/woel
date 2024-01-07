@@ -88,7 +88,7 @@ export default async function Home() {
 
   return (
     <div
-      className="flex flex-col mt-5 gap-8 mb-12"
+      className="flex flex-col mt-5 gap-8 mb-12 sm:px-24 px-6"
     >
       <SearchComponent />
       <MainActions />

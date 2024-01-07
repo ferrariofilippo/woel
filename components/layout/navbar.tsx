@@ -23,7 +23,7 @@ const Navbar = async () => {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div className={"border-b relative z-50 bg-background"}>
+    <div className={"border-b relative z-50 bg-background sm:px-24 px-6 h-16"}>
       <div className="flex h-16 items-center justify-between">
         <div className="flex gap-10">
           <MainNav />
@@ -33,10 +33,7 @@ const Navbar = async () => {
         ) : (
           <div className="ml-auto flex items-center space-x-4 w-fit">
             <a href="/sign-in">
-              <Button variant="ghost">Login</Button>
-            </a>
-            <a href="/sign-in">
-              <Button>Vendi</Button>
+              <Button variant="ghost">Log in</Button>
             </a>
           </div>
         )}
