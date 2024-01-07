@@ -14,7 +14,7 @@ export function MainNav({
     >
       <Link
         href="/"
-        className="text-xl font-semibold transition-colors hover:text-primary"
+        className="text-2xl font-semibold transition-colors hover:text-primary"
       >
         Woel
       </Link>

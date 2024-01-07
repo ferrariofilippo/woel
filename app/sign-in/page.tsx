@@ -13,28 +13,31 @@ import { z } from "zod";
 
 const signInValidationSchema = z.object({
   email: z
-    .string({ required_error: "Email is required" })
-    .email("Not a valid email"),
-  password: z.string({ required_error: "Password is required" }),
+    .string({ required_error: "Email richiesta" })
+    .email("Email non valida"),
+  password: z.string({ required_error: "Password richiesta" }),
 });
 
 const signUpValidationSchema = z.object({
-  email: z.string().min(1, { message: "Email is required" }).email({
-    message: "Please enter a valid email address",
-  }),
+  email: z
+    .string()
+    .min(1, { message: "Email richiesta" })
+    .email({
+      message: "La mail inserita non è valida",
+    }),
   password: z
     .string()
     .refine((password) => /\d/.test(password), {
-      message: "Password must contain at least one number",
+      message: "La password deve contenere almeno un numero",
     })
     .refine((password) => /\W|_/.test(password), {
-      message: "Password must contain at least one special character",
+      message: "La password deve contenere almeno un carattere speciale",
     })
     .refine((password) => /[A-Z]/.test(password), {
-      message: "Password must contain at least one uppercase letter",
+      message: "La password deve contenere almeno una lettere maiuscola",
     })
     .refine((password) => password.length >= 8, {
-      message: "Password must be at least 8 characters long",
+      message: "La password deve essere lunga almeno 8 caratteri",
     }),
 });
 
@@ -42,6 +45,9 @@ type SignInValidationSchema = z.infer<typeof signInValidationSchema>;
 type SignUpValidationSchema = z.infer<typeof signUpValidationSchema>;
 
 export default function AuthenticationPage() {
+  const loginString = "Accedi al tuo account";
+  const signupString = "Crea un account";
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState("sign-in");
   const router = useRouter();
@@ -89,44 +95,35 @@ export default function AuthenticationPage() {
       password,
     });
     setIsLoading(false);
-
-    router.refresh();
+    router.push(location.origin);
   };
 
   return (
-    <div className="container fixed top-0 left-0 right-0 h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+    <div className="container md:py-0 sm:py-16 py-8 min-h-[calc(100vh-4rem)] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900" />
-        <div className="relative z-20 flex items-center text-lg font-medium">
-          <a className="flex items-center" href="/">
-            woel
-          </a>
-        </div>
         <div className="relative z-20 mt-auto">
-          <blockquote className="space-y-2">
-            <p className="text-lg">&ldquo;Hi.&rdquo;</p>
-            {/* <footer className="text-sm">Sofia Davis</footer> */}
-          </blockquote>
+            <p className="text-2xl font-semibold text-gray-700 dark:text-gray-200">Benvenuti</p>
         </div>
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           {view === "email" ? (
             <p className="text-sm text-muted-foreground text-center">
-              Check your email address
+              Controlla la tua mail
             </p>
           ) : (
             <div className="grid gap-6">
               <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">
                   {view === "sign-in"
-                    ? "Log in to your account"
-                    : "Sign in to your acccount"}
+                    ? loginString
+                    : signupString }
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   {view === "sign-in"
-                    ? "Enter your email below to sign in to your account"
-                    : "Enter your email below to create your account"}
+                    ? "Inserisci la tua email qui sotto per accedere"
+                    : "Inserisci la tua email qui sotto per creare un account"}
                 </p>
               </div>
               <form
@@ -137,7 +134,7 @@ export default function AuthenticationPage() {
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
-                      placeholder="name@example.com"
+                      placeholder="nome@esempio.it"
                       type="email"
                       autoCapitalize="none"
                       autoComplete="email"
@@ -148,13 +145,13 @@ export default function AuthenticationPage() {
                     {errors.email && (
                       <p
                         id="filled_error_help"
-                        className="mt-2 text-xs text-red-600 dark:text-red-400"
+                        className="mt-1 text-xs text-red-600 dark:text-red-400"
                       >
                         {errors.email?.message}
                       </p>
                     )}
                   </div>
-                  <div className="grid gap-2">
+                  <div className="grid gap-2 mt-2">
                     <Label htmlFor="password">Password</Label>
                     <Input
                       id="password"
@@ -170,33 +167,33 @@ export default function AuthenticationPage() {
                     {errors.password && (
                       <p
                         id="filled_error_help"
-                        className="mt-2 text-xs text-red-600 dark:text-red-400"
+                        className="mt-1 text-xs text-red-600 dark:text-red-400"
                       >
                         {errors.password?.message}
                       </p>
                     )}
                   </div>
-                  <Button disabled={isLoading}>
+                  <Button disabled={isLoading} className="mt-5">
                     {isLoading && (
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     )}
 
                     {view === "sign-in"
-                      ? "Sign In with Email"
-                      : "Sign up with Email"}
+                      ? "Accedi"
+                      : "Registrati" }
                   </Button>
                   {view === "sign-in" ? (
                     <p className="text-sm text-muted-foreground text-center">
-                      Don&apos;t have an account?
-                      <Button variant="link" onClick={() => setView("sign-up")}>
-                        Sign up now!
+                      Non hai un account?
+                      <Button variant="link" onClick={() => setView("sign-up")} type="button">
+                        Registrati ora!
                       </Button>
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground text-center">
-                      Already have an account?
-                      <Button variant="link" onClick={() => setView("sign-in")}>
-                        Log in now!
+                      Hai già un account?
+                      <Button variant="link" onClick={() => setView("sign-in")} type="button">
+                        Accedi ora!
                       </Button>
                     </p>
                   )}
@@ -208,7 +205,7 @@ export default function AuthenticationPage() {
                 </div>
                 <div className="relative flex justify-center text-xs uppercase">
                   <span className="bg-background px-2 text-muted-foreground">
-                    Or continue with
+                    O continua con
                   </span>
                 </div>
               </div>
