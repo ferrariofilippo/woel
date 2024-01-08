@@ -4,6 +4,7 @@ import { hiddenNavbarRoutes } from "@/lib/costants";
 import { headers } from "next/headers";
 import { Metadata } from "next";
 import "./globals.css";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Woel",
@@ -28,8 +29,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {!isNavbarHidden && <Navbar />}
-          {children}
+          <div className="min-h-screen">
+            {!isNavbarHidden && <Navbar />}
+            {children}
+          </div>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

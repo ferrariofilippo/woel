@@ -16,9 +16,10 @@ const SignOutButton = () => {
 
   const signOut = async () => {
     setIsLoading(true);
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
     setIsLoading(false);
-    router.refresh();
+    if (error === null)
+      router.refresh();
   };
 
   return (

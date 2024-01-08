@@ -95,7 +95,7 @@ export function FiltersSection({ setData, supabase, userId }: FiltersSectionPara
               ></path>
             </svg>
           </div>
-          <h1 className="font-semibold text-lg">
+          <h1 className="font-semibold text-xl">
             Filtri
           </h1>
         </div>

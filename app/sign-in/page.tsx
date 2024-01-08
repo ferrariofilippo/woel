@@ -15,7 +15,10 @@ const signInValidationSchema = z.object({
   email: z
     .string({ required_error: "Email richiesta" })
     .email("Email non valida"),
-  password: z.string({ required_error: "Password richiesta" }),
+  password: z
+    .string({ required_error: "Password richiesta" })
+    .min(1, { message: "Password richiesta" }),
+  confirmPassword: z.string()
 });
 
 const signUpValidationSchema = z.object({
@@ -39,6 +42,15 @@ const signUpValidationSchema = z.object({
     .refine((password) => password.length >= 8, {
       message: "La password deve essere lunga almeno 8 caratteri",
     }),
+    confirmPassword: z.string()
+}).superRefine(({ password, confirmPassword}, context) => {
+  if (password !== confirmPassword) {
+    context.addIssue({
+      code: "custom",
+      message: "Le due password non coincidono",
+      path: ["confirmPassword"],
+    })
+  }
 });
 
 type SignInValidationSchema = z.infer<typeof signInValidationSchema>;
@@ -49,6 +61,7 @@ export default function AuthenticationPage() {
   const signupString = "Crea un account";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasLoginFailed, setHasLoginFailed] = useState<boolean>(false);
   const [view, setView] = useState("sign-in");
   const router = useRouter();
   const supabase = createBrowserClient(
@@ -57,6 +70,7 @@ export default function AuthenticationPage() {
   );
   const {
     register,
+    resetField,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInValidationSchema>({
@@ -67,6 +81,7 @@ export default function AuthenticationPage() {
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: ""
     },
   });
   const signUp = async (user: SignUpValidationSchema) => {
@@ -74,7 +89,7 @@ export default function AuthenticationPage() {
     const password = user.password;
 
     setIsLoading(true);
-    await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -82,26 +97,48 @@ export default function AuthenticationPage() {
       },
     });
     setIsLoading(false);
-
-    setView("email");
+    console.log(data);
+    if (error === null) {
+      setView("email");
+    } else {
+      // TODO: Manage error (e.g. mail already used)
+    }
   };
   const signIn = async (user: SignInValidationSchema) => {
     const email = user.email;
     const password = user.password;
 
+    setHasLoginFailed(false);
     setIsLoading(true);
-    await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     setIsLoading(false);
-    router.push(location.origin);
+
+    if (error === null) {
+      router.push(location.origin);
+      router.refresh();
+    } else {
+      setHasLoginFailed(true);
+      resetField('password');
+    }
+  };
+
+  const switchToSignIn = () => {
+    resetField('password');
+    resetField('confirmPassword');
+    setView("sign-in")
+  };
+  const switchToSignUp = () => {
+    resetField('password');
+    setView("sign-up")
   };
 
   return (
     <div className="container md:py-0 sm:py-16 py-8 min-h-[calc(100vh-4rem)] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-        <div className="absolute inset-0 bg-zinc-900" />
+        <div className="absolute inset-0 bg-zinc-50 dark:bg-zinc-900" />
         <div className="relative z-20 mt-auto">
             <p className="text-2xl font-semibold text-gray-700 dark:text-gray-200">Benvenuti</p>
         </div>
@@ -173,6 +210,29 @@ export default function AuthenticationPage() {
                       </p>
                     )}
                   </div>
+                  {view !== "sign-in" && (
+                    <div className="grid gap-2 mt-2">
+                      <Label htmlFor="password">Conferma Password</Label>
+                      <Input
+                        id="confirm-password"
+                        placeholder="••••••••"
+                        type="password"
+                        autoCapitalize="none"
+                        autoComplete="password"
+                        autoCorrect="off"
+                        disabled={isLoading}
+                        {...register("confirmPassword")}
+                      />
+                      {errors.confirmPassword && (
+                        <p
+                          id="filled_error_help"
+                          className="mt-1 text-xs text-red-600 dark:text-red-400"
+                        >
+                          {errors.confirmPassword?.message}
+                        </p>
+                      )}
+                    </div> 
+                  )}
                   <Button disabled={isLoading} className="mt-5">
                     {isLoading && (
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -182,17 +242,22 @@ export default function AuthenticationPage() {
                       ? "Accedi"
                       : "Registrati" }
                   </Button>
+                  {hasLoginFailed && (
+                    <span className="text-red-400 text-center text-xs">
+                      Login non riuscito
+                    </span> 
+                  )}
                   {view === "sign-in" ? (
                     <p className="text-sm text-muted-foreground text-center">
                       Non hai un account?
-                      <Button variant="link" onClick={() => setView("sign-up")} type="button">
+                      <Button variant="link" onClick={switchToSignUp} type="button">
                         Registrati ora!
                       </Button>
                     </p>
                   ) : (
                     <p className="text-sm text-muted-foreground text-center">
                       Hai già un account?
-                      <Button variant="link" onClick={() => setView("sign-in")} type="button">
+                      <Button variant="link" onClick={switchToSignIn} type="button">
                         Accedi ora!
                       </Button>
                     </p>

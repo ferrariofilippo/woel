@@ -58,6 +58,7 @@ export async function UserNav() {
           variant="ghost"
           className="relative h-8 w-8 rounded-full"
           name="profile_button"
+          aria-label="profile_button"
         >
           <Avatar className="h-8 w-8">
             <AvatarImage src={publicUrl} alt={`@${user_data?.first_name}${user_data?.last_name}`} />

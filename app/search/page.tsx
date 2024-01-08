@@ -78,7 +78,7 @@ export default function Search({
   }, [query, router, supabase]);
 
   return (
-    <div className="mt-5 mb-12">
+    <div className="mt-5 mb-12 sm:px-24 px-6">
       <FiltersSection
         setData={setAds}
         supabase={supabase}
@@ -117,7 +117,7 @@ export default function Search({
                 </div>
                 <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
                 <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-                <span className="sr-only">Loading...</span>
+                <span className="sr-only">Caricando...</span>
               </div>
             )
           }

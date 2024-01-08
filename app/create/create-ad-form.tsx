@@ -171,6 +171,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
     <Form {...form}>
       <form
         action={addAdvertisement}
+        className="sm:px-24 px-6"
       >
         <input hidden readOnly value={user_id} name="user_id" />
         <input hidden readOnly value={book_id} name="book_id" />
