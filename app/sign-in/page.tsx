@@ -62,6 +62,7 @@ export default function AuthenticationPage() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasLoginFailed, setHasLoginFailed] = useState<boolean>(false);
+  const [isMailAlreadyInUse, setIsMailAlreadyInUse] = useState<boolean>(false);
   const [view, setView] = useState("sign-in");
   const router = useRouter();
   const supabase = createBrowserClient(
@@ -88,6 +89,9 @@ export default function AuthenticationPage() {
     const email = user.email;
     const password = user.password;
 
+    setHasLoginFailed(false);
+    setIsMailAlreadyInUse(false);
+
     setIsLoading(true);
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -97,11 +101,14 @@ export default function AuthenticationPage() {
       },
     });
     setIsLoading(false);
-    console.log(data);
-    if (error === null) {
+
+    if (data?.user === null && error === null) {
       setView("email");
-    } else {
-      // TODO: Manage error (e.g. mail already used)
+    } else if (data?.user !== null && data.user.aud === 'authenticated') {
+      setIsMailAlreadyInUse(true);
+      resetField('email');
+      resetField('password');
+      resetField('confirmPassword');
     }
   };
   const signIn = async (user: SignInValidationSchema) => {
@@ -109,6 +116,8 @@ export default function AuthenticationPage() {
     const password = user.password;
 
     setHasLoginFailed(false);
+    setIsMailAlreadyInUse(false);
+
     setIsLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -242,9 +251,12 @@ export default function AuthenticationPage() {
                       ? "Accedi"
                       : "Registrati" }
                   </Button>
-                  {hasLoginFailed && (
+                  {(hasLoginFailed || isMailAlreadyInUse) && (
                     <span className="text-red-400 text-center text-xs">
-                      Login non riuscito
+                      {hasLoginFailed
+                        ? "Login non riuscito"
+                        : "Mail già in uso"
+                      }
                     </span> 
                   )}
                   {view === "sign-in" ? (
