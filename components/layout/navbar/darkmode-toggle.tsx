@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 
@@ -14,7 +13,6 @@ import {
 
 export function ModeToggle() {
   const { setTheme } = useTheme();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,9 +28,6 @@ export function ModeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

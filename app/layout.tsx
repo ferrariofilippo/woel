@@ -1,44 +1,35 @@
 import { Navbar } from "@/components/layout/navbar";
+import { NavbarWrapper } from "@/components/layout/navbar/navbar-wrapper";
 import { ThemeProvider } from "@/components/layout/theme-provider";
-import { hiddenNavbarRoutes } from "@/lib/costants";
-import { headers } from "next/headers";
+
+import { Toaster } from "@/components/ui/toaster";
+import { getServerSession } from "@/lib/api/auth";
 import "./globals.css";
+
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Woel",
   description: "Woel sell and buy",
 };
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  isNavbarHidden,
 }: {
   children: React.ReactNode;
-  isNavbarHidden: boolean;
 }) {
+  const session = await getServerSession();
   return (
     <html lang="en">
-      <body className=" px-24">
+      <body className="max-w-screen m-0 p-0 overflow-x-hidden">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {!isNavbarHidden && <Navbar />}
+          <NavbarWrapper>
+            <Navbar session={session.data.session} />
+          </NavbarWrapper>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
   );
-}
-export async function getServerSideProps() {
-  const headersList = headers();
-  const fullUrl = headersList.get("referer") || "";
-  const currentPagePath = fullUrl
-    .split(process.env.APP_DOMAIN!)
-    .slice(-1)
-    .pop();
-  const isNavbarHidden = hiddenNavbarRoutes.includes(currentPagePath!);
-
-  return {
-    props: {
-      isNavbarHidden: isNavbarHidden,
-    },
-  };
 }

@@ -1,38 +1,24 @@
-import { Button } from "@/components/ui/button";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { Button } from "../ui";
 import { MainNav } from "./navbar/main-nav";
-import { Search } from "./navbar/search";
-import { UserNav } from "./navbar/user-nav";
+import { UserDropdown } from "./navbar/user-dropdwn";
 
-const Navbar = async () => {
-  const supabase = createServerComponentClient({ cookies });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export async function Navbar({ session }: { session: any }) {
   return (
-    <div className={"border-b "}>
+    <div className={"border-b w-full px-7"}>
       <div className="flex h-16 items-center justify-between">
-        <div className="flex gap-10">
+        <div className="flex flex-row justify-center items-center gap-10">
           <MainNav />
-          <Search />
         </div>
-        {user ? (
-          <UserNav />
+        {session ? (
+          <UserDropdown session={session} />
         ) : (
           <div className="ml-auto flex items-center space-x-4 w-fit">
             <a href="/sign-in">
               <Button variant="ghost">Login</Button>
-            </a>
-            <a href="/sign-in">
-              <Button>Sell now</Button>
             </a>
           </div>
         )}
       </div>
     </div>
   );
-};
-
-export { Navbar };
+}

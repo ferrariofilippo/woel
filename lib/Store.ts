@@ -1,35 +1,62 @@
+import { Advertisement, UserData } from "@/types/api";
 import { createClient } from "@supabase/supabase-js";
-import { Database } from "@/types/supabase";
 
 export const SOLD_STATE = 3;
 
 export const database = createClient(
-  process.env.SUPABASE_URL ?? "",
-  process.env.SUPABASE_KEY ?? ""
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_KEY!
 );
 
-export type User = Database["public"]["Tables"]["user_data"]["Update"];
-
-export type Advertisement =
-  Database["public"]["Tables"]["advertisement"]["Row"];
-
-export const fetchUserById = async (userId: string) => {
+export const fetchUserById = async (id: string) => {
   try {
     const { data } = await database
       .from("user_data")
-      .select(
-        `user_id, first_name, last_name, class, email,
-        specialization:specialization_id (specialization_name),
-        school:school_id (school_name)`
-      )
-      .eq("user_id", userId);
-
+      .select(`*`)
+      .eq("id", id)
+      .limit(1)
+      .single();
     return data;
   } catch (error) {
     console.log("error", error);
+    return error;
   }
 };
-
+export const fetchUserByUsername = async (username: string) => {
+  try {
+    const { data } = await database
+      .from("user_data")
+      .select(`*`)
+      .eq("username", username)
+      .limit(1)
+      .single();
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    return error;
+  }
+};
+export const fetchSchools = async () => {
+  try {
+    let { data, error } = await database.from("school").select("*");
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    return error;
+  }
+};
+export const fetchSchoolSpecializations = async (school_id: number) => {
+  try {
+    let { data, error } = await database
+      .from("specialization")
+      .select("*")
+      .eq("school_id", school_id);
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    return error;
+  }
+};
 export const setUserPicture = async (
   userId: string,
   file: ReadableStream<Uint8Array>
@@ -48,18 +75,17 @@ export const setUserPicture = async (
   }
 };
 
-export const updateUser = async (user: User) => {
+export const updateUser = async (user: UserData) => {
   try {
     const { error } = await database
       .from("user_data")
       .update({
-        first_name: user.first_name,
-        last_name: user.last_name,
+        full_name: user.full_name,
         class: user.class,
         school_id: user.school_id,
         specialization_id: user.specialization_id,
       })
-      .eq("user_id", user.user_id);
+      .eq("user_id", user.id);
 
     return error;
   } catch (error) {
@@ -110,14 +136,13 @@ export const fetchAds = async (
   }
 };
 
-export const fetchAdById = async (advertisementId: number) => {
+export const fetchAdById = async (advertisementId: string) => {
   try {
     const { data } = await database
       .from("advertisement")
       .select(
-        `id, price, negotiable_price, rating, notes, status,
-        book:book_id (isbn, title, author, subject, year),
-        owner:owner_id (user_id, first_name, last_name, email)`
+        `id, price, negotiable_price, rating, notes,status, book (isbn, title, author, subject, year),
+        user_data (id,username,full_name, email)`
       )
       .eq("id", advertisementId);
 
@@ -127,6 +152,17 @@ export const fetchAdById = async (advertisementId: number) => {
   }
 };
 
+export const fetchAdByUserName = async (username: string) => {
+  try {
+    const { data } = await database.from("advertisement").select(
+      `id, price, negotiable_price, rating, notes,status, book (isbn, title, author, subject, year),
+        user_data (id,username,full_name, email)`
+    );
+    return data?.filter((data: any) => data.user_data.username === username);
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 export const createAd = async (ad: Advertisement) => {
   try {
     await database.from("advertisement").insert(ad);
@@ -261,6 +297,17 @@ export const deleteAd = async (advertisementId: number) => {
       .eq("id", advertisementId);
 
     return error;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+export const getUserAdsPrev = async (userName: string) => {
+  try {
+    let { data: ad_preview, error } = await database
+      .from("v_ad")
+      .select("*")
+      .eq("seller_username", userName);
+    return ad_preview;
   } catch (error) {
     console.log("error", error);
   }

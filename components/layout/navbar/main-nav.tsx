@@ -1,7 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Logo } from "./logo";
 
 export function MainNav({
   className,
@@ -16,7 +17,7 @@ export function MainNav({
         href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Home
+        <Logo />
       </Link>
     </nav>
   );
