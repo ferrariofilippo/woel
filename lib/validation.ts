@@ -32,7 +32,8 @@ export const signInValidationSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })
     .email("Not a valid email"),
-  password: z.string({ required_error: "Password is required" }).nonempty(),
+  password: z.string({ required_error: "Password is required" }).min(1),
+  confirmPassword: z.string()
 });
 export const signUpValidationSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email({
@@ -52,7 +53,17 @@ export const signUpValidationSchema = z.object({
     .refine((password) => password.length >= 8, {
       message: "Password must be at least 8 characters long",
     }),
+    confirmPassword: z.string()
+}).superRefine(({ password, confirmPassword}, context) => {
+  if (password !== confirmPassword) {
+    context.addIssue({
+      code: "custom",
+      message: "Le due password non coincidono",
+      path: ["confirmPassword"],
+    })
+  }
 });
+
 export type SignInValidationSchema = z.infer<typeof signInValidationSchema>;
 export type SignUpValidationSchema = z.infer<typeof signUpValidationSchema>;
 export type PasswordResetValidationSchema = z.infer<

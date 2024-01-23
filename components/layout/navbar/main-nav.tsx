@@ -15,7 +15,7 @@ export function MainNav({
     >
       <Link
         href="/"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="text-2xl font-semibold transition-colors hover:text-primary"
       >
         <Logo />
       </Link>

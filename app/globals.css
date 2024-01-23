@@ -1,6 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+ 
+::selection {
+  background-color: #FFF;
+  color: #000;
+}
+
+::-moz-selection {
+  background-color: #FFF;
+  color: #000;
+}
 
 @layer base {
   :root {

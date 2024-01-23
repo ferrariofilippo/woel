@@ -14,18 +14,23 @@ import {
 } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
 export default function AuthenticationPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [view, setView] = useState("sign-in");
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
   const {
     register,
+    resetField,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInValidationSchema>({
@@ -40,10 +45,10 @@ export default function AuthenticationPage() {
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: ""
     },
   });
   const signUp = async (user: SignUpValidationSchema) => {
-    setIsLoading(true);
     const email = user.email;
     const password = user.password;
 
@@ -55,24 +60,27 @@ export default function AuthenticationPage() {
       },
     });
     setIsLoading(false);
-    if (error) {
+    if (error || data?.user?.aud === 'authenticated') {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "Mail is already in use!",
       });
+
+      resetField('email');
+      resetField('password');
+      resetField('confirmPassword');
       return;
     }
+
     toast({
       description: "We sent you a confirmation email to : " + data.user?.email,
     });
     setView("email");
   };
   const signIn = async (user: SignInValidationSchema) => {
-    setIsLoading(true);
     const email = user.email;
     const password = user.password;
-
     let { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -84,6 +92,7 @@ export default function AuthenticationPage() {
         title: "Error",
         description: error.message,
       });
+      resetField('password');
       return error;
     }
     toast({
@@ -141,6 +150,17 @@ export default function AuthenticationPage() {
     });
     setView("password-reset-confirmation");
   };
+
+  const switchToSignIn = () => {
+    resetField('password');
+    resetField('confirmPassword');
+    setView("sign-in")
+  };
+  const switchToSignUp = () => {
+    resetField('password');
+    setView("sign-up")
+  };
+
   return (
     <div>
       {view === "email" ? (
@@ -255,6 +275,29 @@ export default function AuthenticationPage() {
                   </p>
                 )}
               </div>
+              {view !== "sign-in" && (
+                    <div className="grid gap-2 mt-2">
+                      <Label htmlFor="password">Conferma Password</Label>
+                      <Input
+                        id="confirm-password"
+                        placeholder="••••••••"
+                        type="password"
+                        autoCapitalize="none"
+                        autoComplete="password"
+                        autoCorrect="off"
+                        disabled={isLoading}
+                        {...register("confirmPassword")}
+                      />
+                      {errors.confirmPassword && (
+                        <p
+                          id="filled_error_help"
+                          className="mt-1 text-xs text-red-600 dark:text-red-400"
+                        >
+                          {errors.confirmPassword?.message}
+                        </p>
+                      )}
+                    </div> 
+                  )}
               <div className="flex flex-col gap-2 justify-center mt-3 items-center">
                 {/* {requestError !== "" && (
                   <Alert variant="destructive">
@@ -275,7 +318,7 @@ export default function AuthenticationPage() {
                 <div>
                   <p className="text-sm text-muted-foreground text-center">
                     Dont have an account?
-                    <Button variant="link" onClick={() => setView("sign-up")}>
+                    <Button variant="link" onClick={switchToSignUp} type="button">
                       Sign up now!
                     </Button>
                   </p>
@@ -291,7 +334,7 @@ export default function AuthenticationPage() {
               ) : (
                 <p className="text-sm text-muted-foreground text-center">
                   Already have an account?
-                  <Button variant="link" onClick={() => setView("sign-in")}>
+                  <Button variant="link" onClick={switchToSignIn} type="button">
                     Sign in now!
                   </Button>
                 </p>
