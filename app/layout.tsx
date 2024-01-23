@@ -23,7 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className="max-w-screen m-0 p-0 overflow-x-hidden">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="min-vh-screen">
+          <div className="min-h-screen">
             <NavbarWrapper>
               <Navbar session={session.data.session} />
             </NavbarWrapper>
