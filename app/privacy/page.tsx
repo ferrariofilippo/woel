@@ -14,7 +14,7 @@ export default function PrivacyPage() {
         personali che ci fornisci quando utilizzi il nostro servizio Woel. <br />
         Si prega di leggere attentamente questa politica sulla privacy prima 
         di utilizzare Woel o  fornirci qualsiasi informazione personale. <br />
-        Per qualunque altra informazione ti preghiamo di contattare l'azienda tramite questo link:
+        Per qualunque altra informazione ti preghiamo di contattare l&apos;azienda tramite questo link:
         <a href="https://github.com/ferrariofilippo/woel/issues" target="_blank">woel/issues</a>
       </p>
       <ul>
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           </p>
           <p className="mt-2">
             Raccogliamo le informazioni personali che ci fornisci volontariamente 
-            durante la registrazione o l'utilizzo del Sito.
+            durante la registrazione o l&apos;utilizzo del Sito.
           </p>
           <p> Queste informazioni possono includere, ma non sono limitate a:</p>
           <ul className="ml-3">
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
               utente, come foto, interessi, biografia e altro.
             </li>
             <li>
-              <b>3. Contenuti generati dall'utente </b>: le informazioni che pubblichi, carichi o condividi tramite Woel, 
+              <b>3. Contenuti generati dall&apos;utente </b>: le informazioni che pubblichi, carichi o condividi tramite Woel, 
               commenti, foto e altri contenuti.
             </li>
             <li>
@@ -59,7 +59,7 @@ export default function PrivacyPage() {
               3. Consentire interazioni tra gli utenti del Sito, come la condivisione di contenuti.
             </li>
             <li>4. Rispondere alle tue richieste, domande o commenti.</li>
-            <li>5. Proteggere la sicurezza, la legalità e l'integrità del Sito e dei suoi utenti.</li>
+            <li>5. Proteggere la sicurezza, la legalità e l&apos;integrità del Sito e dei suoi utenti.</li>
             <li>6. Ottemperare a obblighi legali e regolamentari.</li>
           </ul>
         </li>
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
             </li>
             <li>
               <b>2. Autorità legali</b> : possiamo divulgare le informazioni personali se 
-              richiesto dalla legge, da un processo legale o da un'indagine governativa.
+              richiesto dalla legge, da un processo legale o da un&apos;indagine governativa.
             </li>
             <li>
               <b>3. Protezione dei diritti e della sicurezza</b> : possiamo divulgare le 

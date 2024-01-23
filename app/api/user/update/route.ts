@@ -30,13 +30,12 @@ export async function PUT(request: Request) {
   const { error } = await supabase
     .from('user_data')
     .update({
-      first_name: user.first_name,
-      last_name: user.last_name,
+      full_name: user.full_name,
       class: user.class,
       school_id: user.school_id,
       specialization_id: user.specialization_id
     })
-    .eq('user_id', user.user_id);
+    .eq('user_id', user.id);
 
   return NextResponse.json(error);
 }

@@ -1,28 +1,20 @@
 // const mainNav = [{ path: "/", name: "Home" }];
+export const BASE_URL = process.env.NEXT_PUBLIC_APP_DOMAIN;
+export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+export const hiddenNavbarRoutes: string[] = ["/sign-in"];
 
-export const hiddenNavbarRoutes = ["/sign-up", "/sign-in"];
 export const profileSidebarNavItems = [
   {
-    title: "Profile",
-    href: "/profile",
-  },
-  {
     title: "Account",
-    href: "/profile/account",
+    href: "/account",
   },
   {
     title: "Appearance",
-    href: "/profile/appearence",
+    href: "/account/appearence",
   },
 ];
-export const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
+export enum SignInProviders {
+  Github,
+  Google,
+  Discord,
+}
