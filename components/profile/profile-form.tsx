@@ -94,11 +94,10 @@ export function ProfileForm({
         description: error.message,
       });
       return error;
-    } else {
-      toast({
-        description: "Updated Profile",
-      });
     }
+    toast({
+      description: "Your profile was updated succesfully",
+    });
     if (redirectOnSumbit) {
       router.push("/");
       router.refresh();

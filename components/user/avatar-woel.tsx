@@ -23,12 +23,13 @@ export const AvatarWoel = ({
       <Avatar className={`mt-2 `} style={{ height: height, width: width }}>
         <AvatarImage
           src={
-            avatar_url ??
-            MinidentIconURI({
-              username: username,
-              saturation: "90",
-              lightness: "50",
-            })
+            avatar_url
+              ? avatar_url
+              : MinidentIconURI({
+                  username: username ? username : "user",
+                  saturation: "90",
+                  lightness: "50",
+                })
           }
           onLoad={() => setLoaded(true)}
         />
