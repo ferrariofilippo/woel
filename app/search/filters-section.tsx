@@ -73,7 +73,7 @@ export function FiltersSection({ setData, supabase, userId }: FiltersSectionPara
   return (
     <div
       id="filters-drawer"
-      className="absolute z-40 sm:w-[calc(100%-12rem)] w-[calc(100%-3rem)] overflow-y-auto bg-white border-b border-neutral-200 rounded-b-lg dark:border-neutral-800 dark:bg-neutral-900 transition-transform top-[64px] sm:-translate-y-[236px] -translate-y-[292px]"
+      className="absolute z-[40] sm:w-[calc(100%-12rem)] w-[calc(100%-3rem)] overflow-y-auto bg-white border-b border-neutral-200 rounded-b-lg dark:border-neutral-800 dark:bg-neutral-900 transition-transform top-[64px] sm:-translate-y-[228px] -translate-y-[280px]"
       tabIndex={-1}
       aria-labelledby="filters-swipe-label"
     >
@@ -187,11 +187,11 @@ export function FiltersSection({ setData, supabase, userId }: FiltersSectionPara
         onClick={() => {
           const drawer = document.getElementById("filters-drawer");
           if (isFilterSectionExpanded) {
-            drawer?.classList.add("sm:-translate-y-[236px]");
-            drawer?.classList.add("-translate-y-[292px]");
+            drawer?.classList.add("sm:-translate-y-[228px]");
+            drawer?.classList.add("-translate-y-[280px]");
           } else {
-            drawer?.classList.remove("sm:-translate-y-[236px]");
-            drawer?.classList.remove("-translate-y-[292px]");
+            drawer?.classList.remove("sm:-translate-y-[228px]");
+            drawer?.classList.remove("-translate-y-[280px]");
           }
 
           isFilterSectionExpanded = !isFilterSectionExpanded;
