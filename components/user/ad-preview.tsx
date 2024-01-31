@@ -16,7 +16,7 @@ export function AdPreview({ adPreview }: { adPreview: AdPreview }) {
         <CardContent className="p-0">
           <Image
             key={adPreview?.id}
-            src={adPreview ? supabase.storage.from("images").getPublicUrl(adPreview.cover_url).data.publicUrl : ""}
+            src={adPreview?.cover_url ? supabase.storage.from("images").getPublicUrl(adPreview.cover_url).data.publicUrl : ""}
             height={300}
             width={150}
             alt={adPreview?.cover_url!}
