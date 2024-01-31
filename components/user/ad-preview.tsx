@@ -1,15 +1,22 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { AdPreview } from "@/types/api";
+import { createBrowserClient } from "@supabase/ssr";
 import Image from "next/image";
 import Link from "next/link";
+
 export function AdPreview({ adPreview }: { adPreview: AdPreview }) {
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+  );
+  
   return (
     <Link href="">
       <Card className="w-auto border-0 p-0 text-center flex  flex-col justify-content-center items-center">
         <CardContent className="p-0">
           <Image
             key={adPreview?.id}
-            src={adPreview?.cover_url!}
+            src={adPreview ? supabase.storage.from("images").getPublicUrl(adPreview.cover_url).data.publicUrl : ""}
             height={300}
             width={150}
             alt={adPreview?.cover_url!}

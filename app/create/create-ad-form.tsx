@@ -89,13 +89,14 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
     if (!data)
       return;
 
-    for (const url of imagesUrl) {
+    for (let i = 0; i < imagesUrl.length; i++) {
       await supabase
         .from('advertisement_picture')
         .insert({
           advertisement_id: data[0].id,
           id: undefined,
-          url: url
+          url: imagesUrl[i],
+          isCover: i === 0
         });
     }
 
@@ -213,7 +214,7 @@ export function CreateAdForm({ books, user_id }: CreateAdParams) {
                   />
                 </svg>
                 <p
-                  className="mb-2 text-sm text-gray-500 dark:text-gray-400"
+                  className="mb-2 text-sm text-gray-500 dark:text-gray-400 text-center"
                 >
                   <span className="font-semibold">Clicca per caricare</span> oppure trascina e rilascia
                 </p>
