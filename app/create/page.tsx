@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
-import { CreateAdForm } from "@/app/create/create-ad-form";
 import { redirect } from "next/navigation";
+import { UpsertAdForm } from "@/components/forms/upsert-ad-form";
 
 export default async function Create() {
   const cookieStore = cookies();
@@ -26,6 +26,10 @@ export default async function Create() {
   const { data } = await supabase.from('book').select('isbn,title');
 
   return (
-    <CreateAdForm books={data} user_id={session?.user.id ?? ""} />
+    <UpsertAdForm
+      books={data}
+      advertisement={null}
+      userId={session?.user.id ?? ""}
+    />
   );
 }
