@@ -75,9 +75,8 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
   const [newImages] = useState(Array<string>());
   const oldImages = Array<string>();
 
-  const upsertAdvertisement = async (ad: Advertisement) => {
+  const upsertAdvertisement = async (ad: z.infer<typeof upsertAdvertisementSchema>) => {
     setIsSavingChanges(true);
-    ad.price = parseFloat(ad.price.toString().replace(',', '.'));
 
     const noError = advertisement
       ? await editAdvertisement(ad)
@@ -94,7 +93,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
     setIsSavingChanges(false);
   };
 
-  const addAdvertisement = async (ad: Advertisement) => {
+  const addAdvertisement = async (ad: z.infer<typeof upsertAdvertisementSchema>) => {
     const { data } = await supabase
       .from('advertisement')
       .insert({
@@ -103,7 +102,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
         book_id: ad.book_id,
         negotiable_price: ad.negotiable_price,
         notes: ad.notes,
-        price: ad.price,
+        price: parseFloat(ad.price.replace(',', '.')),
         rating: rating,
         status: "Available"
       })
@@ -126,7 +125,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
     return true;
   };
 
-  const editAdvertisement = async (ad: Advertisement) => {
+  const editAdvertisement = async (ad: z.infer<typeof upsertAdvertisementSchema>) => {
     const { data } = await supabase
       .from('advertisement')
       .update({
@@ -136,7 +135,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
         book_id: ad.book_id,
         negotiable_price: ad.negotiable_price,
         notes: ad.notes,
-        price: ad.price,
+        price: parseFloat(ad.price.replace(',', '.')),
         rating: rating,
       })
       .eq('id', advertisement?.id)
@@ -259,14 +258,14 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
     router.push("/");
   };
 
-  const form = useForm<Advertisement>({
+  const form = useForm<z.infer<typeof upsertAdvertisementSchema>>({
     mode: "onSubmit",
     resolver: zodResolver(upsertAdvertisementSchema),
     defaultValues: {
       book_id: advertisement?.book_id ?? "",
       negotiable_price: advertisement?.negotiable_price ?? false,
       notes: advertisement?.notes ?? "",
-      price: advertisement?.price ?? 9.99,
+      price: advertisement?.price.toString() ?? "9.99"
     },
   });
 
@@ -320,7 +319,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
             </div>
             <div
               className={cn(
-                "border-2 border-gray-500 border-dashed rounded-lg max-h-[calc(100%-3rem)] w-full lg:pb-5 pb-4 p-3 overflow-y-auto hover:bg-neutral-100 dark:hover:bg-neutral-900",
+                "border-2 border-gray-500 border-dashed rounded-lg lg:h-[calc(100%-3rem)] max-h-[calc(100%-3rem)] w-full lg:pb-5 pb-4 p-3 overflow-y-auto hover:bg-neutral-100 dark:hover:bg-neutral-900",
                 hasImages
                   ? "flex flex-wrap justify-between"
                   : "hidden"
@@ -366,7 +365,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
             <label
               htmlFor="file-input"
               className={cn(
-                "items-center justify-center w-full md:h-full h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-accent dark:border-gray-600 dark:hover:border-gray-500",
+                "items-center justify-center w-full lg:h-[calc(100%-3rem)] md:max-h-[calc(100%-3rem)] w-full lg:pb-5 pb-4 h-80 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer hover:bg-accent dark:border-gray-600 dark:hover:border-gray-500",
                 hasImages
                   ? "hidden"
                   : "flex flex-col"
