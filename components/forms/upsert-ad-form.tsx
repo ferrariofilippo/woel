@@ -73,6 +73,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
   const [hasImages, setHasImages] = useState(false);
   const [imagesToRemove] = useState(Array<string>());
   const [newImages] = useState(Array<string>());
+  const oldImages = Array<string>();
 
   const upsertAdvertisement = async (ad: Advertisement) => {
     setIsSavingChanges(true);
@@ -188,7 +189,6 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
   };
 
   const deletePictures = async () => {
-    console.log(imagesToRemove);
     if (!imagesToRemove.length)
       return;
 
@@ -222,6 +222,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
   const loadImages = async () => {
     imagesToRemove.splice(0);
     newImages.splice(0);
+    oldImages.splice(0);
 
     if (!advertisement)
       return;
@@ -236,8 +237,10 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
 
     imageNames.splice(0);
     if (data) {
-      for (const d of data)
+      for (const d of data) {
         imageNames.push(d.url as string);
+        oldImages.push(d.url as string);
+      }
 
       setHasImages(imageNames.length !== 0);
     }
@@ -246,7 +249,13 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
   };
 
   const cancel = async () => {
-    await supabase.storage.from("images").remove(newImages);
+    const toDelete = newImages.slice(0);
+    for (const img of imagesToRemove) {
+      if (oldImages.indexOf(img) === -1)
+        toDelete.push(img);
+    }
+    
+    await supabase.storage.from("images").remove(toDelete);
     router.push("/");
   };
 
@@ -274,7 +283,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(upsertAdvertisement)}
-        className="sm:px-24 px-6"
+        className="lg:px-24 sm:px-12 px-6"
       >
         <h1
           className="my-5 text-3xl font-semibold tracking-tight leading-none text-gray-900 md:text-4xl dark:text-white"
@@ -284,8 +293,8 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
             : "Crea"
           }
         </h1>
-        <div className="flex md:flex-row flex-col mx-auto mb-8 min-h-[70vh] max-h-[70vh] gap-x-10 gap-y-4">
-          <div className="flex flex-col gap-y-4 lg:w-3/5 md:w-2/3 w-full items-center min-h-full max-h-full">
+        <div className="flex md:flex-row flex-col mx-auto mb-8 min-h-[70vh] md:max-h-[80vh] lg:max-h-[90vh] gap-x-10 gap-y-8">
+          <div className="flex flex-col gap-y-4 md:w-3/5 w-full items-center min-h-full max-h-full">
             <div className="flex justify-between w-full h-12">
               <h3 className="text-xl font-semibold my-auto">
                 Carica immagini
@@ -311,7 +320,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
             </div>
             <div
               className={cn(
-                "border-2 border-gray-500 border-dashed rounded-lg h-[calc(100%-3rem)] w-full p-3 overflow-y-auto hover:bg-neutral-100 dark:hover:bg-neutral-900",
+                "border-2 border-gray-500 border-dashed rounded-lg max-h-[calc(100%-3rem)] w-full lg:pb-5 pb-4 p-3 overflow-y-auto hover:bg-neutral-100 dark:hover:bg-neutral-900",
                 hasImages
                   ? "flex flex-wrap justify-between"
                   : "hidden"
@@ -322,7 +331,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
                 : imageNames.map((name: string) => {
                   return (
                     <div
-                      className="w-1/2 mt-2 px-2 mb-auto relative"
+                      className="lg:w-1/2 w-full lg:mt-2 mt-1 lg:px-2 px-1 mb-auto relative"
                       key={name}
                     >
                       <Image
@@ -404,7 +413,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
                 </>}
             </label>
           </div>
-          <div className="lg:w-2/5 md:w-1/4 w-full flex flex-col gap-y-4">
+          <div className="md:w-2/5 w-full flex flex-col gap-y-4">
             <FormField
               control={form.control}
               name="book_id"
@@ -502,7 +511,6 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
                         checked={field.value}
                         onCheckedChange={e => {
                           field.onChange(e)
-                          console.log(field);
                         }}
                       />
                     </FormControl>
@@ -543,7 +551,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
             />
           </div>
         </div>
-        <div className="flex gap-x-2 w-full justify-end">
+        <div className="flex gap-x-2 w-full justify-end mb-8">
           <Button
             onClick={cancel}
             variant="secondary"
