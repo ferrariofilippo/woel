@@ -24,7 +24,7 @@ export async function UserDropdown({ session }: { session: any }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
           <AvatarWoel
             username={profile.username!}
             avatar_url={profile.avatar_url!}

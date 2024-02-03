@@ -3,13 +3,29 @@
 @tailwind utilities;
  
 ::selection {
-  background-color: #FFF;
-  color: #000;
+  background-color: hsl(var(--foreground));
+  color: hsl(var(--background));
 }
 
 ::-moz-selection {
-  background-color: #FFF;
-  color: #000;
+  background-color: hsl(var(--foreground));
+  color: hsl(var(--background));
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: hsl(var(--accent));
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--destructive));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--primary));
 }
 
 @layer base {
