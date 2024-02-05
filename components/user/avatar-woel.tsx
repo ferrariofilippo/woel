@@ -20,7 +20,7 @@ export const AvatarWoel = ({
   const [loaded, setLoaded] = useState(false);
   return (
     <div className="flex justify-center">
-      <Avatar className={`mt-2 `} style={{ height: height, width: width }}>
+      <Avatar className={`p-1`} style={{ height: height, width: width }}>
         <AvatarImage
           src={
             avatar_url
