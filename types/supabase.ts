@@ -15,7 +15,7 @@ export interface Database {
           creation_date: string
           id: number
           negotiable_price: boolean
-          notes: string | null
+          notes: string
           owner_id: string
           price: number
           rating: number
