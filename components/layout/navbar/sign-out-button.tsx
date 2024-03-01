@@ -4,9 +4,9 @@ import { Icons } from "@/components/icons";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
 import { ExitIcon } from "@radix-ui/react-icons";
+import { createBrowserClient } from "@supabase/ssr";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { createBrowserClient } from "@supabase/ssr";
 
 const SignOutButton = () => {
   const supabase = createBrowserClient(

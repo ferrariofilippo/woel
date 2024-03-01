@@ -1,0 +1,177 @@
+{
+  "Advertisment": {
+    "Cover": "Copertina"
+  },
+  "Appearance": {
+    "ChangedTo": "Tema modificato a : %1$s",
+    "ChooseLanguage": "Scegli la lingua dell'applicazione",
+    "Customize": "Personalizza l'aspetto dell'app.",
+    "SelectTheme": "Seleziona il tema dell'applicazione.",
+    "UpdatePreferences": "Aggiorna preferenze"
+  },
+  "Common": {
+    "Account": "Account",
+    "Ad": "Annuncio",
+    "Add": "Aggiungi",
+    "Advertisment": "Annuncio",
+    "Advertisments": "Annunci",
+    "Appearance": "Aspetto",
+    "Available": "Disponibile",
+    "Awful": "Pessime",
+    "Book": "Libro",
+    "Characters": "caratteri",
+    "CompleteProfile": "Completa profilo",
+    "Conditions": "Condizioni",
+    "Create": "Crea",
+    "Created": "creato",
+    "Dark": "Scuro",
+    "Discrete": "Discrete",
+    "Edit": "Create",
+    "Edited": "modificato",
+    "Eight": "otto",
+    "Email": "email",
+    "Error": "errore",
+    "Excellent": "Ottime",
+    "Filters": "Filtri",
+    "Good": "Buone",
+    "Inbox": "Messaggi",
+    "Info": "Info",
+    "Language": "Lingua",
+    "Light": "Chiaro",
+    "Loading": "Caricando...",
+    "Mediocre": "Mediocri",
+    "Next": "Prossimo",
+    "Nome": "Nome",
+    "Notes": "Note",
+    "Number": "numero",
+    "Numbers": "numeri",
+    "One": "un",
+    "Password": "Password",
+    "Photo": "foto",
+    "Positive": "Positivo",
+    "Previous": "Precedente",
+    "Price": "Prezzo",
+    "Privacy": "Privacy",
+    "Profile": "Profilo",
+    "Remove": "Rimuovi",
+    "Reviews": "Recensioni",
+    "School": "Scuola",
+    "Search": "Cerca",
+    "SearchPlaceholder": "Cerca un ",
+    "SignIn": "Accedi",
+    "SpecialCharacter": "carattere speciale",
+    "Specialization": "Specializzazione",
+    "Subject": "Materia",
+    "Succesfully": " con successo",
+    "Surname": "Cognome",
+    "Theme": "Tema",
+    "Undo": "Annulla",
+    "UppercaseLetter": "caratteri maiuscolo",
+    "User": "Utente",
+    "Username": "Nome utente",
+    "Year": "Anno"
+  },
+  "CreateAd": {
+    "Author": "Autore",
+    "ChooseA": "Scegli un %1$s",
+    "ClickAndRelese": "oppure trascina e rilascia",
+    "ClickHereToUpLoad": "Clicca per caricare",
+    "ClickToUpload": "Clicca per caricare",
+    "ContactSeller": "Contatta il venditore",
+    "CreateAd": " Crea un annuncio ",
+    "DragAndDrop": "oppure trascina e rilascia",
+    "ISBN": "ISBN",
+    "LoadThing": "Carica %1$s",
+    "NegotiablePrice": "Prezzo negoziabile",
+    "NegotiationStarted": "Negoziazione iniziata",
+    "NoLongerAvailable": "Non più disponibile",
+    "YouAddIt": "Aggiungilo tu"
+  },
+  "Filters": {
+    "ChooseYear": "Scegli l'anno",
+    "MaximumPrice": "Prezzo massimo"
+  },
+  "Footer": {
+    "ContactUs": "Contattaci",
+    "FooterText": "Copyright © %1$s. I creatori di Woel"
+  },
+  "LatestAds": {
+    "TitleWhatsNew": "Novità:"
+  },
+  "LocaleSwitcher": {
+    "label": "Cambia lingua",
+    "locale": "{locale, select, it {🇮🇹 Italiano} en {🇬🇧 Inglese} other {Unknown}}"
+  },
+  "Login": {
+    "AlreadyHaveAccount": "Hai già un account?",
+    "CheckInbox": "Controlla il messaggio ricevuto nella tua casella",
+    "ConfirmPassword": "Conferma Password",
+    "ContinueWith": "Oppure continua con ",
+    "DontHaveAccount": "Non hai un account?",
+    "ForgotYourPassword": "Hai dimenticato la tua password?",
+    "MailUsed": "Questo indirizzo e-mail è già utilizzato!",
+    "RecoverPassword": "Recupera la tua password",
+    "SentResetEmail": "Ti abbiamo inviato un'e-mail per reimpostare la password",
+    "SignIn": "Accedi",
+    "SignInEnterEmail": "Inserisci il tuo indirizzo e-mail",
+    "SignInNow": "Accedi ora!",
+    "SignInSuccessful": "Accesso riuscito",
+    "SignUp": "Iscriviti",
+    "SignUpEnterEmail": "Inserisci il tuo nuovo indirizzo e-mail",
+    "SignUpNow": "Iscriviti ora!",
+    "UpdateAccount": "Aggiorna password",
+    "UpdatedPassword": "Password aggiornata con successo"
+  },
+  "MainActions": {
+    "CreateBtn": "  Vendi subito",
+    "InfoBtn": "Scopri di più",
+    "TitleH1": "Inizia a vendere i tuoi libri"
+  },
+  "Navbar": {
+    "ToggleTheme": "Modifica tema"
+  },
+  "ProfileForm": {
+    "DisplayedUsername": "Questo è il nome utente che verrà visualizzato sul tuo profilo.",
+    "FullNameDescription": "Questo è il nome che verrà visualizzato sul tuo profilo e nelle e-mail.",
+    "SchoolDescription": "Questa è la scuola",
+    "SchoolDetails": "Dettagli scuola",
+    "SpecializationDescription": "Questa è la specializzazione scolastica",
+    "UpdateAccount": "Aggiorna account",
+    "UpdatedSuccess": "Il tuo profilo è stato aggiornato con successo",
+    "UserAvatar": "Avatar utente",
+    "UserDetails": "Dettagli utente",
+    "YourName": "Il tuo nome"
+  },
+  "Search": {
+    "SearchResults": "Ecco i risultati della tua ricerca"
+  },
+  "SettingsLayout": {
+    "AccountSettings": "Impostazioni account",
+    "ManagePreferences": "Gestisci le impostazioni del tuo account e imposta le preferenze di posta elettronica."
+  },
+  "User": {
+    "UpdateAvatar": "Aggiorna avatar"
+  },
+  "Validation": {
+    "EnterValid": "Inserire un %1$s valido",
+    "InvalidFormatMustBe": "Il formato file invalido deve essere %1$s",
+    "InvalidLoginCredentials": "Credenziali di accesso non valide",
+    "IsRequired": "%1$s is obbligatorio",
+    "MustBe": "%1$s deve essere %2$s",
+    "MustBeBetween": "%1$s deve essere comprese tra  %2$s e %3$s",
+    "MustBeFormat": "Il formato di %1$s deve essere %2$s",
+    "MustBeHigher": "%1$s deve essere superiore %2$s %3$s",
+    "MustBeLower": "%1$s deve essere inferiore %2$s %3$s",
+    "MustContainLeast": "%1$s deve contenere almeno %2$s %3$s",
+    "Negative": "negativo",
+    "OverMaxChars": "%1$s non deve essere più lungo di %2$s caratteri",
+    "PasswordNotMatch": "Le %1$s non coincidono",
+    "Positive": "positivo",
+    "Select": "Seleziona un %1$s ",
+    "SelectToDisplay": "Seleziona un %1$s valido da visualizzare",
+    "UnderLeastChars": "%1$s deve essere almeno di %2$s caratteri",
+    "UpdatedSuccess": "La tua password è stato aggiornata con successo",
+    "XDidNotMatch": "Le password non corrispondono",
+    "XNotFound": "%1$s non trovato"
+  }
+}

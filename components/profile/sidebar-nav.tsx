@@ -1,10 +1,12 @@
 "use client";
 
+import * as changeCase from "change-case";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -15,7 +17,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const pathname = usePathname();
-
+  const i18nCommon = useTranslations("Common");
   return (
     <nav
       className={cn(
@@ -36,7 +38,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             "justify-start"
           )}
         >
-          {item.title}
+          {i18nCommon(changeCase.sentenceCase(item.title))}
         </Link>
       ))}
     </nav>

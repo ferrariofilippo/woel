@@ -4,8 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 export const SOLD_STATE = 3;
 
 export const database = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export const fetchUserById = async (id: string) => {

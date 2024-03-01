@@ -3,16 +3,24 @@ import { getAvatarURL } from "@/lib/api/user";
 import { SUPABASE_URL } from "@/lib/costants";
 import { UserData } from "@/types/api";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { WoelAvatar } from "../avatar-woel";
 import { Icons } from "../icons";
 import { Button } from "../ui";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useToast } from "../ui/use-toast";
-import { AvatarWoel } from "./avatar-woel";
+
+var sprintf = require("sprintf-js").sprintf,
+  vsprintf = require("sprintf-js").vsprintf;
 
 export default function AvatarUpload({ profile }: { profile: UserData }) {
+  const i18nCommon = useTranslations("Common");
+  const i18n = useTranslations("Validation");
+  const i18nUser = useTranslations("User");
+
   const [avatar, setAvatar] = useState<string>("");
   useEffect(() => {
     setAvatarURL();
@@ -48,7 +56,7 @@ export default function AvatarUpload({ profile }: { profile: UserData }) {
       if (error) {
         toast({
           variant: "destructive",
-          title: "Error",
+          title: i18nCommon("Error"),
           description: error.message,
         });
       }
@@ -63,15 +71,17 @@ export default function AvatarUpload({ profile }: { profile: UserData }) {
       setIsLoading(false);
     } else {
       if (!file) {
-        console.log(file);
         toast({
           variant: "destructive",
-          description: "Please select a photo",
+          description: sprintf(i18n("Select"), i18nCommon("Photo")),
         });
       } else if (!isFilePFPSupported(file.type)) {
         toast({
           variant: "destructive",
-          description: "Invalid file format must be .PNG .JPEG or .GIF",
+          description: sprintf(
+            i18n("InvalidFormatMustBe"),
+            ".PNG .JPEG or .GIF"
+          ),
         });
       }
     }
@@ -96,10 +106,10 @@ export default function AvatarUpload({ profile }: { profile: UserData }) {
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          "Update avatar"
+          i18nUser("UpdateAvatar")
         )}
       </Button>
-      <AvatarWoel
+      <WoelAvatar
         username={profile.username!}
         avatar_url={avatar!}
         height={120}

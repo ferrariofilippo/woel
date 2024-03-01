@@ -14,20 +14,22 @@ import {
   PersonIcon,
 } from "@radix-ui/react-icons";
 
-import { AvatarWoel } from "@/components/user/avatar-woel";
+import { WoelAvatar } from "@/components/avatar-woel";
 import { getUserByID } from "@/lib/api/user";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import SignOutButton from "./sign-out-button";
 
 export async function UserDropdown({ session }: { session: any }) {
+  const i18nCommon = useTranslations("Common");
   const profile = await getUserByID(session.user?.id!);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <AvatarWoel
-            username={profile.username!}
-            avatar_url={profile.avatar_url!}
+          <WoelAvatar
+            username={profile?.username!}
+            avatar_url={profile?.avatar_url!}
           />
         </Button>
       </DropdownMenuTrigger>
@@ -47,19 +49,19 @@ export async function UserDropdown({ session }: { session: any }) {
           <Link href={"/user/" + profile?.username}>
             <DropdownMenuItem className="gap-2">
               <PersonIcon />
-              Profile
+              {i18nCommon("Profile")}
             </DropdownMenuItem>
           </Link>
           <Link href="/inbox">
             <DropdownMenuItem className="gap-2">
               <EnvelopeClosedIcon />
-              Inbox
+              {i18nCommon("Inbox")}
             </DropdownMenuItem>
           </Link>
           <Link href="/account">
             <DropdownMenuItem className="gap-2">
               <GearIcon />
-              Account
+              {i18nCommon("Account")}
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
