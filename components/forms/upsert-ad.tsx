@@ -277,41 +277,42 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
     },
   });
 
-  // NOTE: Empty dependency array is needed to execute 'useEffect' only once
-  useEffect(() => {
-    const loadImages = async () => {
-      imagesToRemove.splice(0);
-      newImages.splice(0);
-      oldImages.splice(0);
+  const loadImages = async () => {
+    imagesToRemove.splice(0);
+    newImages.splice(0);
+    oldImages.splice(0);
 
-      if (!advertisement) return;
+    if (!advertisement) return;
 
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const { data } = await supabase
-        .from("advertisement_picture")
-        .select("url")
-        .eq("advertisement_id", advertisement.id)
-        .order("isCover", { ascending: false });
+    const { data } = await supabase
+      .from("advertisement_picture")
+      .select("url")
+      .eq("advertisement_id", advertisement.id)
+      .order("isCover", { ascending: false });
 
-      imageNames.splice(0);
-      if (data) {
-        for (const d of data) {
-          imageNames.push(d.url as string);
-          oldImages.push(d.url as string);
-        }
-
-        setHasImages(imageNames.length !== 0);
+    imageNames.splice(0);
+    if (data) {
+      for (const d of data) {
+        imageNames.push(d.url as string);
+        oldImages.push(d.url as string);
       }
 
-      setIsLoading(false);
-    };
+      setHasImages(imageNames.length !== 0);
+    }
+
+    setIsLoading(false);
+  };
+
+  // NOTE: Empty dependency array is needed to execute 'useEffect' only once
+  useEffect(() => {
     const loadData = async () => {
       await loadImages();
     };
 
     loadData();
-  });
+  }, []);
 
   return (
     <Form {...form}>

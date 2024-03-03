@@ -282,7 +282,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
         <table className="w-full">
           <tbody>
             <tr>
-              <td className="font-semibold">{i18n("NegotiationStarted")}</td>
+              <td className="font-semibold">ISBN</td>
               <td className="tracking-wide">{ad.book.isbn}</td>
             </tr>
             <tr>
@@ -301,9 +301,9 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
               <td className="font-semibold">{i18n("NegotiablePrice")}</td>
               <td>
                 {ad.negotiable_price ? (
-                  <span>Sì &#x2714;</span>
+                  <span>{i18nCommon("Yes")} &#x2714;</span>
                 ) : (
-                  <span>No &#x2716;</span>
+                  <span>{i18nCommon("No")} &#x2716;</span>
                 )}
               </td>
             </tr>

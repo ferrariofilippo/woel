@@ -28,6 +28,9 @@ import { Input } from "../ui/input";
 import AvatarUpload from "../user/avatar-upload";
 import WoelForm from "../woel/woel-form";
 
+var sprintf = require("sprintf-js").sprintf,
+  vsprintf = require("sprintf-js").vsprintf;
+
 interface ProfileFormProps {
   profile: UserData;
   schools: School[];
@@ -41,30 +44,48 @@ export function ProfileForm({
   redirectOnSumbit,
 }: ProfileFormProps) {
   const i18n = useTranslations("ProfileForm");
-  const i18nCommon = useTranslations("Common");
+  const i18nValidation = useTranslations("Validation");
 
+  const i18nCommon = useTranslations("Common");
   const { toast } = useToast();
   const supabase = createClientComponentClient();
   const [schoolSpecializations, setSpecializations] =
     useState<Specialization[]>(specializations);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+
   const profileFormSchema = z.object({
     username: z
       .string()
       .min(2, {
-        message: "Username must be at least 2 characters.",
+        message: sprintf(
+          i18nValidation("MustbBeLeastChars"),
+          i18nCommon("Username"),
+          "2"
+        ),
       })
       .max(30, {
-        message: "Username must not be longer than 30 characters.",
+        message: sprintf(
+          i18nValidation("MustBeUnderChars"),
+          i18nCommon("Username"),
+          "30"
+        ),
       }),
     full_name: z
       .string()
       .min(2, {
-        message: "First name must be at least 2 characters.",
+        message: sprintf(
+          i18nValidation("MustbBeLeastChars"),
+          i18nCommon("Name"),
+          "2"
+        ),
       })
       .max(30, {
-        message: "First name must not be longer than 30 characters.",
+        message: sprintf(
+          i18nValidation("MustBeUnderChars"),
+          i18nCommon("Name"),
+          "30"
+        ),
       }),
     school_name: z.number(),
     specialization_name: z.number(),

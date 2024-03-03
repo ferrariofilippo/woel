@@ -57,7 +57,15 @@ export function UpdatePasswordForm() {
             i18n("MustContainLeast"),
             "Password",
             i18nCommon("One"),
-            i18nCommon("UppercaseLetter")
+            i18nCommon("UppercaseChar")
+          ),
+        })
+        .refine((password) => /[a-z]/.test(password), {
+          message: sprintf(
+            i18n("MustContainLeast"),
+            "Password",
+            i18nCommon("One"),
+            i18nCommon("LowerCaseChar")
           ),
         })
         .refine((password) => password.length >= 8, {

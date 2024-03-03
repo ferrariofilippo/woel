@@ -17,7 +17,7 @@ export function SearchComponent({ onChangeHandler }: SearchComponentParams) {
     <Input
       id="searchbar"
       type="search"
-      placeholder={t("SearchPlaceholder") + t("Book")} //cerca un libro...
+      placeholder={t("SearchPlaceholder") + t("Book")}
       className="flex"
       onChange={
         onChangeHandler
