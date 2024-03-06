@@ -10,6 +10,10 @@
     "UpdatePreferences": "Update preferences"
   },
   "Common": {
+    "A": {
+      "Feminine": "a",
+      "Masculine": "a "
+    },
     "Account": "Account",
     "Ad": "Advertisment",
     "Add": "Add",
@@ -34,6 +38,7 @@
     "Excellent": "Excellent",
     "Filters": "Filters",
     "Good": "Good",
+    "Images": "Images",
     "Inbox": "Inbox",
     "Info": "Info",
     "Language": "Language",
@@ -50,6 +55,7 @@
     "One": "one",
     "Password": "Password",
     "Photo": "photo",
+    "Picture": "Picture",
     "Positive": "Positive",
     "Previous": "Previous",
     "Price": "Price",
@@ -78,8 +84,7 @@
     "Author": "Author",
     "ChooseA": "Choose a %1$s",
     "ClickAndRelese": "or drag & drop",
-    "ClickHereToUpLoad": "Click to upload",
-    "ClickToUpload": "Click to upload",
+    "ClickHereToUpLoad": "Click to upload ",
     "ContactSeller": "Contact the seller",
     "CreateAd": "Create an advertisement",
     "DragAndDrop": "or drag & drop",
@@ -119,6 +124,8 @@
     "SignInEnterEmail": "Enter your email",
     "SignInNow": "Sign in now!",
     "SignInSuccessful": "Succesful login",
+    "SignOut": "Sign out",
+    "SignOutSuccess": "Signed out succesfully!",
     "SignUp": "Sign up ",
     "SignUpEnterEmail": "Enter your new email",
     "SignUpNow": "Sign up now!",

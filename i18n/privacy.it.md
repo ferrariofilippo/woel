@@ -6,7 +6,7 @@ Ultimo aggiornamento: _08/01/2024_
 
 **La tua privacy è importante per noi.**
 
-Questa politica sulla privacy descrive come raccogliamo, utilizziamo, divulgiamo e proteggiamo le informazioni personali che ci fornisci quando utilizzi il nostro servizio Woel.  
+Questa politica sulla privacy descrive come raccogliamo, utilizziamo, divulghiamo e proteggiamo le informazioni personali che ci fornisci quando utilizzi il nostro servizio Woel.  
 Si prega di leggere attentamente questa politica sulla privacy prima di utilizzare Woel o fornirci qualsiasi informazione personale.  
 Per qualunque altra informazione ti preghiamo di contattare l'azienda tramite questo link: [woel/issues](https://github.com/ferrariofilippo/woel/issues)
 

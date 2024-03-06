@@ -40,7 +40,7 @@ export function UpdatePasswordForm() {
           message: sprintf(
             i18n("MustContainLeast"),
             "Password",
-            i18nCommon("One"),
+            i18nCommon("Eight"),
             i18nCommon("Number")
           ),
         })

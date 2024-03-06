@@ -327,7 +327,7 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
           <div className="flex flex-col gap-y-4 md:w-3/5 w-full items-center min-h-full max-h-full">
             <div className="flex justify-between w-full h-12">
               <h3 className="text-xl font-semibold my-auto">
-                {i18n("LoadThing")}
+                {sprintf(i18n("LoadThing"), i18nCommon("Images"))}
               </h3>
               <label
                 className={cn(
@@ -473,13 +473,17 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
                     </PopoverTrigger>
                     <PopoverContent className="sm:w-[24rem] w-[85vw] p-0">
                       <Command>
-                        <CommandInput placeholder="Cerca un libro..." />
+                        <CommandInput
+                          placeholder={
+                            i18nCommon("SearchPlaceholder") + i18nCommon("Book")
+                          }
+                        />
                         <CommandEmpty>
                           <div className="flex flex-col">
                             {sprintf(
                               i18nValidation("XNotFound"),
                               i18nCommon("Book")
-                            )}{" "}
+                            )}
                             <a className="font-semibold" href={"/book/create"}>
                               {i18n("YouAddIt")}
                             </a>

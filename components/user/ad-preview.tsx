@@ -33,7 +33,7 @@ export function AdPreview({ adPreview }: { adPreview: AdPreview }) {
           <p className="text-sm text-muted-foreground">
             {adPreview?.book_author}
           </p>
-          <p className="font-semibold ">$ {adPreview?.price}</p>
+          <p className="font-semibold ">€ {adPreview?.price}</p>
         </CardFooter>
       </Card>
     </Link>

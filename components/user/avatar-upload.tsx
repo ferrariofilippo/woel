@@ -99,7 +99,7 @@ export default function AvatarUpload({ profile }: { profile: UserData }) {
   return (
     <form onSubmit={handleSubmit}>
       <div className="grid w-full max-w-sm items-center gap-2 my-3">
-        <Label htmlFor="picture">Picture</Label>
+        <Label htmlFor="picture">{i18nCommon("Picture")}</Label>
         <Input id="picture" type="file" onChange={handleFileSelected} />
       </div>
       <Button type="submit" disabled={isLoading} variant="secondary">
