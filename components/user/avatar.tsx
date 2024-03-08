@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Icons } from "../icons";
 import { MinidentIconImg } from "./minidenticon";
 
-export const AvatarWoel = ({
+export const WoelAvatar = ({
   avatar_url,
   username,
 }: {

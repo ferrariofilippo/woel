@@ -1,0 +1,187 @@
+{
+  "Advertisment": {
+    "Cover": "Cover"
+  },
+  "Appearance": {
+    "ChangedTo": "Changed theme to : %1$s",
+    "ChooseLanguage": "Choose your app language",
+    "Customize": "Customize the appearance of the app.",
+    "SelectTheme": "Select your application theme.",
+    "UpdatePreferences": "Update preferences"
+  },
+  "Common": {
+    "A": {
+      "Feminine": "a",
+      "Masculine": "a "
+    },
+    "Account": "Account",
+    "Ad": "Advertisment",
+    "Add": "Add",
+    "Advertisment": "Advertisment",
+    "Advertisments": "Advertisments",
+    "Appearance": "Appearance",
+    "Available": "Available",
+    "Awful": "Awful",
+    "Book": "Book",
+    "Characters": "characters",
+    "CompleteProfile": "Complete profile",
+    "Conditions": "Conditions",
+    "Create": "Create",
+    "Created": "created",
+    "Dark": "Dark",
+    "Discrete": "Discrete",
+    "Edit": "Edit",
+    "Edited": "edited",
+    "Eight": "eight",
+    "Email": "email address",
+    "Error": "error",
+    "Excellent": "Excellent",
+    "Filters": "Filters",
+    "Good": "Good",
+    "Images": "Images",
+    "Inbox": "Inbox",
+    "Info": "Info",
+    "Language": "Language",
+    "Light": "Light",
+    "Loading": "Loading...",
+    "LowerCaseLetter": "lower case character",
+    "Mediocre": "Mediocre",
+    "Name": "Name",
+    "Next": "Next",
+    "No": "No",
+    "Notes": "Notes",
+    "Number": "number",
+    "Numbers": "numbers",
+    "One": "one",
+    "Password": "Password",
+    "Photo": "photo",
+    "Picture": "Picture",
+    "Positive": "Positive",
+    "Previous": "Previous",
+    "Price": "Price",
+    "Privacy": "Privacy",
+    "Profile": "Profile",
+    "Remove": "Remove",
+    "Reviews": "Reviews",
+    "School": "School",
+    "Search": "Search",
+    "SearchPlaceholder": "Search for a ",
+    "SignIn": "Sign in",
+    "SpecialCharacter": "special character",
+    "Specialization": "Specialization",
+    "Subject": "Subject",
+    "Succesfully": "succesfully",
+    "Surname": "Surname",
+    "Theme": "Theme",
+    "Undo": "Undo",
+    "UppercaseLetter": "upper case letter",
+    "User": "User",
+    "Username": "Username",
+    "Year": "Year",
+    "Yes": "Yes"
+  },
+  "CreateAd": {
+    "Author": "Author",
+    "ChooseA": "Choose a %1$s",
+    "ClickAndRelese": "or drag & drop",
+    "ClickHereToUpLoad": "Click to upload ",
+    "ContactSeller": "Contact the seller",
+    "CreateAd": "Create an advertisement",
+    "DragAndDrop": "or drag & drop",
+    "ISBN": "ISBN",
+    "LoadThing": "Load %1$s",
+    "NegotiablePrice": "Negotiable price",
+    "NegotiationStarted": "Negoziazione iniziata",
+    "NoLongerAvailable": "No longer available",
+    "YouAddIt": "Add it"
+  },
+  "Filters": {
+    "ChooseYear": "Choose the year",
+    "MaximumPrice": "Maximum price"
+  },
+  "Footer": {
+    "ContactUs": "Contact us",
+    "FooterText": "Copyright © %1$s. The creators of Woel"
+  },
+  "LatestAds": {
+    "TitleWhatsNew": "What's new:"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, it {🇮🇹 Italian} en {🇬🇧 English} other {Unknown}}"
+  },
+  "Login": {
+    "AlreadyHaveAccount": "Already have an account?",
+    "CheckInbox": "Check the message received in your inbox",
+    "ConfirmPassword": "Confirm password",
+    "ContinueWith": "  Or continue with",
+    "DontHaveAccount": "Dont have an account?",
+    "ForgotYourPassword": "Forgot your password?",
+    "MailUsed": "This e-mail address is already in use!",
+    "RecoverPassword": "Recover your password",
+    "SentResetEmail": "We sent you an email to reset your password",
+    "SignIn": "Sign In",
+    "SignInEnterEmail": "Enter your email",
+    "SignInNow": "Sign in now!",
+    "SignInSuccessful": "Succesful login",
+    "SignOut": "Sign out",
+    "SignOutSuccess": "Signed out succesfully!",
+    "SignUp": "Sign up ",
+    "SignUpEnterEmail": "Enter your new email",
+    "SignUpNow": "Sign up now!",
+    "UpdateAccount": "Update password",
+    "UpdatedPassword": "Updated password succesfully"
+  },
+  "MainActions": {
+    "CreateBtn": "Sell now",
+    "InfoBtn": "Read more",
+    "TitleH1": "Start selling your books"
+  },
+  "Navbar": {
+    "ToggleTheme": "Toggle theme"
+  },
+  "ProfileForm": {
+    "DisplayedUsername": "This is the username that will be displayed on your profile.",
+    "FullNameDescription": "This is the name that will be displayed on your profile and in emails.",
+    "SchoolDescription": "This is the school",
+    "SchoolDetails": "School details",
+    "SpecializationDescription": "This is the school specialization",
+    "UpdateAccount": "Update account",
+    "UpdatedSuccess": "Your profile was updated succesfully",
+    "UserAvatar": "User Avatar",
+    "UserDetails": "User Details",
+    "YourName": "Your name"
+  },
+  "Search": {
+    "SearchResults": "Here are the results of your search"
+  },
+  "SettingsLayout": {
+    "AccountSettings": "Account Settings",
+    "ManagePreferences": "Manage your account settings and set e-mail preferences."
+  },
+  "User": {
+    "UpdateAvatar": "Update avatar"
+  },
+  "Validation": {
+    "EnterValid": "Please enter a valid %1$s",
+    "InvalidFormatMustBe": "Invalid file format must have a value %1$s",
+    "InvalidLoginCredentials": "Invalid Login credentials",
+    "IsRequired": "%1$s is required",
+    "MustBe": "%1$s must be %2$s",
+    "MustBeBetween": "%1$s must have a value between than %2$s and %3$s",
+    "MustBeFormat": "%1$s format must be %2$s",
+    "MustBeHigher": "%1$s must be higher than %2$s %3$s",
+    "MustBeLower": "%1$s must be lower than %2$s %3$s",
+    "MustBeUnderChars": "%1$s must not be longer than %2$s characters",
+    "MustContainLeast": "%1$s must contain at least %2$s %3$s",
+    "MustbBeLeastChars": "%1$s must be at least %2$s characters long",
+    "Negative": "negative",
+    "PasswordNotMatch": "The %1$s did not match",
+    "Positive": "positive",
+    "Select": "Please select a %1$s",
+    "SelectToDisplay": "Please select a valid  %1$s to display",
+    "UpdatedSuccess": "Your password was updated succesfully",
+    "XDidNotMatch": "The passwords did not match",
+    "XNotFound": "%1$s not found"
+  }
+}

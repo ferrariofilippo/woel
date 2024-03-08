@@ -10,9 +10,10 @@ export const profileSidebarNavItems = [
   },
   {
     title: "Appearance",
-    href: "/account/appearence",
+    href: "/account/appearance",
   },
 ];
+
 export enum SignInProviders {
   Github,
   Google,
