@@ -81,7 +81,7 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
   };
 
   return (
-    <div className="flex md:flex-row flex-col sm:mx-auto mx-0 mt-5 mb-12 min-h-[85vh] gap-x-20 gap-y-8">
+    <div className="flex md:flex-row flex-col sm:mx-24 mx-5 mt-5 mb-12 min-h-[85vh] gap-x-20 gap-y-8">
       <div className="flex flex-col lg:w-1/2 md:w-2/3 w-full items-center justify-center min-h-full">
         <div className="flex gap-2 w-full">
           <Avatar className="h-8 w-8">
@@ -90,9 +90,12 @@ export function AdDetails({ ad, userId }: AdDetailsParams) {
               <DefaultAvatar />
             </AvatarFallback>
           </Avatar>
-          <div className="my-auto truncate text-ellipsis">
+          <a 
+            className="my-auto truncate text-ellipsis"
+            href={"/user/" + ad.owner.username}
+          >
             {`@${ad.owner.username}`}
-          </div>
+          </a>
         </div>
         <div id="images-carousel" className="relative w-full my-4">
           <div className="relative h-56 overflow-hidden rounded-lg md:h-96 flex flex-col justify-center">

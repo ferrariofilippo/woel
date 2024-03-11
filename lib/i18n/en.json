@@ -92,8 +92,7 @@
     "LoadThing": "Load %1$s",
     "NegotiablePrice": "Negotiable price",
     "NegotiationStarted": "Negoziazione iniziata",
-    "NoLongerAvailable": "No longer available",
-    "YouAddIt": "Add it"
+    "NoLongerAvailable": "No longer available"
   },
   "Filters": {
     "ChooseYear": "Choose the year",
