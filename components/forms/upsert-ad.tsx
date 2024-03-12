@@ -484,9 +484,6 @@ export function UpsertAdForm({ advertisement, books, userId }: UpsertAdParams) {
                               i18nValidation("XNotFound"),
                               i18nCommon("Book")
                             )}
-                            <a className="font-semibold" href={"/book/create"}>
-                              {i18n("YouAddIt")}
-                            </a>
                           </div>
                         </CommandEmpty>
                         <CommandGroup>

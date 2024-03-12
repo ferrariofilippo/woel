@@ -80,11 +80,13 @@ export function AdvertisementDisplay({ ad, userId }: AdvertisementDisplayParams)
             <DefaultAvatar />
           </AvatarFallback>
         </Avatar>
-        <div
+        <a
           className="my-auto truncate text-ellipsis"
+          href={"/user/" + ad.owner.username}
+          onClick={(e) => e.stopPropagation()}
         >
           {`@${ad.owner.username}`}
-        </div>
+        </a>
       </div>
       <div
         className="h-64 w-full rounded-lg my-3 flex flex-col justify-center"
